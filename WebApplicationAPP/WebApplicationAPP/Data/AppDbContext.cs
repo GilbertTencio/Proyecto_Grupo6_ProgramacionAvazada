@@ -10,10 +10,14 @@ namespace WebApplicationAPP.Data
         {
 
         }
-       // Clase;
-       // public DbSet<Persona> Persona { get; set; }
-       // public DbSet<Cliente> Cliente { get; set; }
-       // public DbSet<Inventario> Inventario { get; set; }
+        //Comercio
+        public DbSet<Comercio> Comercios { get; set; }
+
+
+        // Clase;
+        // public DbSet<Persona> Persona { get; set; }
+        // public DbSet<Cliente> Cliente { get; set; }
+        // public DbSet<Inventario> Inventario { get; set; }
 
     }
 }
