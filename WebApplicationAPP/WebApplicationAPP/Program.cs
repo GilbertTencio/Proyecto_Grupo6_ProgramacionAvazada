@@ -20,7 +20,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 // Clase;
-//builder.Services.AddScoped<IPersonaRepository, PersonaRepository>();
+builder.Services.AddScoped<IComercioRepository, ComercioRepository>();
 //builder.Services.AddScoped<PersonaBussiness>();
 //builder.Services.AddControllersWithViews();
 // Repositories
