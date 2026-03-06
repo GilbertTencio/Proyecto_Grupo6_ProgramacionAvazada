@@ -1,0 +1,66 @@
+﻿@model WebApplicationAPP.Models.Comercio
+
+@{
+    ViewData["Title"] = "Detalles Comercio";
+}
+
+<h2>Detalles del Comercio</h2>
+
+<div>
+
+    <dl class="row">
+
+        <dt class="col-sm-3">Identificación</dt>
+        <dd class="col-sm-9">@Model.Identificacion</dd>
+
+
+        <dt class="col-sm-3">Tipo Identificación</dt>
+        <dd class="col-sm-9">
+            @(Model.TipoIdentificacion == 1 ? "Física" : "Jurídica")
+        </dd>
+
+
+        <dt class="col-sm-3">Nombre</dt>
+        <dd class="col-sm-9">@Model.Nombre</dd>
+
+
+        <dt class="col-sm-3">Tipo Comercio</dt>
+        <dd class="col-sm-9">
+            @(Model.TipoDeComercio == 1 ? "Restaurantes" :
+                        Model.TipoDeComercio == 2 ? "Supermercados" :
+                        Model.TipoDeComercio == 3 ? "Ferreterías" : "Otros")
+        </dd>
+
+
+        <dt class="col-sm-3">Teléfono</dt>
+        <dd class="col-sm-9">@Model.Telefono</dd>
+
+
+        <dt class="col-sm-3">Correo</dt>
+        <dd class="col-sm-9">@Model.CorreoElectronico</dd>
+
+
+        <dt class="col-sm-3">Dirección</dt>
+        <dd class="col-sm-9">@Model.Direccion</dd>
+
+
+        <dt class="col-sm-3">Fecha Registro</dt>
+        <dd class="col-sm-9">@Model.FechaDeRegistro</dd>
+
+
+        <dt class="col-sm-3">Fecha Modificación</dt>
+        <dd class="col-sm-9">@Model.FechaDeModificacion</dd>
+
+
+        <dt class="col-sm-3">Estado</dt>
+        <dd class="col-sm-9">
+            @(Model.Estado ? "Activo" : "Inactivo")
+        </dd>
+
+    </dl>
+
+</div>
+
+<a asp-action="Index" class="btn btn-secondary">
+    Volver
+</a>

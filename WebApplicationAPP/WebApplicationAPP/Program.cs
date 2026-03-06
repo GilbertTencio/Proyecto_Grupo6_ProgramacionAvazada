@@ -5,10 +5,11 @@ using WebApplicationAPP.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllersWithViews();
-builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+// MVC
+builder.Services.AddControllersWithViews()
+    .AddRazorRuntimeCompilation();
 
-
+// DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseMySql(
@@ -19,26 +20,17 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     );
 });
 
-// Clase;
-builder.Services.AddScoped<IComercioRepository, ComercioRepository>();
-//builder.Services.AddScoped<PersonaBussiness>();
-//builder.Services.AddControllersWithViews();
 // Repositories
-//builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
-//builder.Services.AddScoped<IInventarioRepository, InventarioRepository>();
+builder.Services.AddScoped<IComercioRepository, ComercioRepository>();
+
 // Business
-//builder.Services.AddScoped<ClienteBusiness>();
-//builder.Services.AddScoped<InventarioBusiness>();
-
-
+builder.Services.AddScoped<ComercioBusiness>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
