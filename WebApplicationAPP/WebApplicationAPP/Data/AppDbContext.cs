@@ -13,8 +13,14 @@ namespace WebApplicationAPP.Data
         //Comercio
         public DbSet<Comercio> Comercios { get; set; }
 
+        //Caja
+        public DbSet<Caja> Cajas { get; set; }
 
-        // Clase;
+        //Sinpe
+        public DbSet<Sinpe> Sinpes { get; set; }
+        public DbSet<BitacoraEvento> BitacoraEventos { get; set; }
+
+        // Ej; clase;
         // public DbSet<Persona> Persona { get; set; }
         // public DbSet<Cliente> Cliente { get; set; }
         // public DbSet<Inventario> Inventario { get; set; }
