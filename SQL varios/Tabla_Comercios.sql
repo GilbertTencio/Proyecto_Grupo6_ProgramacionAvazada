@@ -1,1 +1,0 @@
-    TipoIdentificacion INT NOT NULL,
