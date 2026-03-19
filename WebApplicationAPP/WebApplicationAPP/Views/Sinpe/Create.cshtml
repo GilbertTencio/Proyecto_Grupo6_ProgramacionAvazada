@@ -1,0 +1,77 @@
+﻿@model WebApplicationAPP.Models.Sinpe
+
+@{
+    ViewData["Title"] = "Realizar Sinpe";
+}
+
+<h2>Realizar Sinpe</h2>
+
+<form asp-action="Create">
+
+    <div class="form-group">
+
+        <label asp-for="IdCaja"></label>
+
+        <input asp-for="IdCaja" class="form-control" type="number"/>
+
+        <span asp-validation-for="IdCaja" class="text-danger"></span>
+
+    </div>
+
+    <div class="form-group">
+
+        <label asp-for="TelefonoOrigen"></label>
+
+        <input asp-for="TelefonoOrigen" class="form-control" />
+
+        <span asp-validation-for="TelefonoOrigen" class="text-danger"></span>
+
+    </div>
+
+    <div class="form-group">
+
+        <label asp-for="TelefonoDestino"></label>
+
+        <input asp-for="TelefonoDestino" class="form-control" />
+
+        <span asp-validation-for="TelefonoDestino" class="text-danger"></span>
+
+    </div>
+
+    <div class="form-group">
+
+        <label asp-for="Monto"></label>
+
+        <input asp-for="Monto" class="form-control" type="number"/>
+
+        <span asp-validation-for="Monto" class="text-danger"></span>
+
+    </div>
+
+    <div class="form-group">
+
+        <label asp-for="Descripcion"></label>
+
+        <input asp-for="Descripcion" class="form-control" />
+
+        <span asp-validation-for="Descripcion" class="text-danger"></span>
+
+    </div>
+
+    <br>
+
+    <button type="submit" class="btn btn-success">
+        Realizar
+    </button>
+
+    <a asp-action="Index" class="btn btn-secondary">
+        Volver
+    </a>
+
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
