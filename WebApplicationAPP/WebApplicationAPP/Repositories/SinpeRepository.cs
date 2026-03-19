@@ -18,9 +18,9 @@ namespace WebApplicationAPP.Repositories
             return _context.Sinpes.OrderByDescending(s => s.FechaDeRegistro).ToList();
         }
 
-        public Sinpe GetByTelefonoDestinatario(string telefonoDestino)
+        public List<Sinpe> GetByTelefonoDestinatario(string telefonoDestino)
         {
-            return _context.Sinpes.FirstOrDefault(s => s.TelefonoDestino == telefonoDestino);
+            return _context.Sinpes.Where(s => s.TelefonoDestino == telefonoDestino).OrderByDescending(s => s.FechaDeRegistro).ToList();
         }
 
         public List<Sinpe> GetByComercio(int idCaja)

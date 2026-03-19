@@ -17,7 +17,7 @@ namespace WebApplicationAPP.Bussines
             return _repository.GetAllSinpes();
         }
 
-        public Sinpe GetByTelefonoDestinatario(string telefonoDestino)
+        public List<Sinpe> GetByTelefonoDestinatario(string telefonoDestino)
         {
             return _repository.GetByTelefonoDestinatario(telefonoDestino);
         }
