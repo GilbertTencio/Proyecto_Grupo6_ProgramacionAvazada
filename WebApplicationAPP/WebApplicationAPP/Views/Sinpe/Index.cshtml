@@ -1,0 +1,54 @@
+﻿@model IEnumerable<WebApplicationAPP.Models.Sinpe>
+
+@{
+    ViewData["Title"] = "Sinpes";
+}
+
+<h2>Historial de Sinpes</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Realizar Sinpe</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Sinpe</th>
+            <th>Caja</th>
+            <th>Teléfono de origen</th>
+            <th>Teléfono de destino</th>
+            <th>Monto</th>
+            <th>Descripción</th>
+            <th>Estado</th>
+            <th>Fecha de registro</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>@item.IdSinpe</td>
+
+                <td>@item.IdCaja</td>
+
+                <td>@item.TelefonoOrigen</td>
+
+                <td>@item.TelefonoDestino</td>
+
+                <td>@item.Monto</td>
+
+                <td>@item.Descripcion</td>
+
+                <td>
+                    @(item.Estado ? "Sincronizado" : "No sincronizado")
+                </td>
+
+                <td>@item.FechaDeRegistro</td>
+
+            </tr>
+        }
+    </tbody>
+
+</table>

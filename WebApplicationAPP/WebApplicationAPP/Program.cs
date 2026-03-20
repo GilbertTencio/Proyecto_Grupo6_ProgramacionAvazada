@@ -22,9 +22,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // Repositories
 builder.Services.AddScoped<IComercioRepository, ComercioRepository>();
+builder.Services.AddScoped<ISinpeRepository, SinpeRepository>();
 
 // Business
 builder.Services.AddScoped<ComercioBusiness>();
+builder.Services.AddScoped<SinpeBusiness>();
 
 var app = builder.Build();
 
