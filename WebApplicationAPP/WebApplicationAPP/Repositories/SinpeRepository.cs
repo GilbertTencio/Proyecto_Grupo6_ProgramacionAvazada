@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using WebApplicationAPP.Data;
+﻿using WebApplicationAPP.Data;
 using WebApplicationAPP.Models;
 
 namespace WebApplicationAPP.Repositories
@@ -13,29 +12,25 @@ namespace WebApplicationAPP.Repositories
             _context = context;
         }
 
-        public List<Sinpe> GetAllSinpes()
-        {
-            return _context.Sinpes.OrderByDescending(s => s.FechaDeRegistro).ToList();
-        }
-
-        public List<Sinpe> GetByTelefonoDestinatario(string telefonoDestino)
-        {
-            return _context.Sinpes.Where(s => s.TelefonoDestino == telefonoDestino).OrderByDescending(s => s.FechaDeRegistro).ToList();
-        }
-
-        public List<Sinpe> GetByComercio(int idCaja)
-        {
-            return _context.Sinpes.Where(s => s.IdCaja == idCaja).OrderByDescending(s => s.FechaDeRegistro).ToList();
-        }
-
-        public void AddSinpe(Sinpe sinpe)
+        public void Add(Sinpe sinpe)
         {
             _context.Sinpes.Add(sinpe);
             _context.SaveChanges();
         }
-        public Caja GetCaja(int idCaja)
+
+        public List<Sinpe> GetAll()
         {
-            return _context.Cajas.FirstOrDefault(c => c.IdCaja == idCaja);
+            return _context.Sinpes
+                .OrderByDescending(s => s.FechaDeRegistro)
+                .ToList();
+        }
+
+        public List<Sinpe> GetByCaja(int idCaja)
+        {
+            return _context.Sinpes
+                .Where(s => s.IdCaja == idCaja)
+                .OrderByDescending(s => s.FechaDeRegistro)
+                .ToList();
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using WebApplicationAPP.Bussines;
+using WebApplicationAPP.Data;
 using WebApplicationAPP.Models;
 
 namespace WebApplicationAPP.Controllers
@@ -7,40 +9,49 @@ namespace WebApplicationAPP.Controllers
     public class SinpeController : Controller
     {
         private readonly SinpeBusiness _business;
+        private readonly AppDbContext _context;
 
-        public SinpeController(SinpeBusiness business)
+        public SinpeController(SinpeBusiness business, AppDbContext context)
         {
             _business = business;
-        }
-        public IActionResult Index()
-        {
-            var sinpes = _business.GetAll();
-            return View(sinpes);
+            _context = context;
         }
 
+        // LISTADO GENERAL
+        public IActionResult Index()
+        {
+            var lista = _business.GetAll();
+            return View(lista);
+        }
+
+        // FORMULARIO
         public IActionResult Create()
         {
+            ViewBag.Cajas = new SelectList(_context.Cajas, "IdCaja", "Nombre");
             return View();
         }
 
+        // REGISTRO
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public IActionResult Create(Sinpe sinpe)
         {
-            if (!ModelState.IsValid)
+            var resultado = _business.Registrar(sinpe);
+
+            if (!resultado)
             {
+                ViewBag.Cajas = new SelectList(_context.Cajas, "IdCaja", "Nombre");
+                ViewBag.Error = "No se pudo registrar el pago.";
                 return View(sinpe);
             }
 
-            var creado = _business.Add(sinpe);
+            return RedirectToAction("Index");
+        }
 
-            if (!creado)
-            {
-                ModelState.AddModelError("", "Verifique que el teléfono de destino este registrado, que la caja se encuentre activa y que el valor del monto sea mayor a 0.");
-                return View(sinpe);
-            }
-
-            return RedirectToAction(nameof(Index));
+        // VER SINPES POR CAJA
+        public IActionResult PorCaja(int idCaja)
+        {
+            var lista = _business.GetByCaja(idCaja);
+            return View("Index", lista);
         }
     }
 }

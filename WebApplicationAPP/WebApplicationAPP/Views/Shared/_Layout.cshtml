@@ -16,51 +16,42 @@
 
     <header>
 
-        <nav class="navbar navbar-expand-sm navbar-dark bg-dark mb-3">
-
+        <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
             <div class="container">
-
-                <a class="navbar-brand" asp-controller="Home" asp-action="Index">
-                    Banco los patitos
+        
+                <!-- LOGO -->
+                <a class="navbar-brand fw-bold" asp-controller="Home" asp-action="Index">
+                    🏦 Banco los patitos
                 </a>
 
-                <button class="navbar-toggler"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#navbarMain">
-
+                <!-- BOTÓN MOBILE -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
-
                 </button>
 
-                <div class="collapse navbar-collapse" id="navbarMain">
-
-                    <ul class="navbar-nav me-auto">
-
+                <!-- LINKS -->
+                <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                    <ul class="navbar-nav">
+                
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Home" asp-action="Index">
-                                Inicio
-                            </a>
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">Inicio</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Comercio" asp-action="Index">
-                                Comercios
-                            </a>
+                            <a class="nav-link" asp-controller="Comercio" asp-action="Index">Comercios</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Sinpe" asp-action="Index">
-                                Sinpe
-                            </a>
+                            <a class="nav-link" asp-controller="Sinpe" asp-action="Create">Sinpe</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Bitacora" asp-action="Index">Bitácora</a>
                         </li>
 
                     </ul>
-
                 </div>
-
             </div>
-
         </nav>
 
     </header>

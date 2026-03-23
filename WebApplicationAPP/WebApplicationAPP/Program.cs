@@ -23,6 +23,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Repositories
 builder.Services.AddScoped<IComercioRepository, ComercioRepository>();
 builder.Services.AddScoped<ISinpeRepository, SinpeRepository>();
+builder.Services.AddScoped<IBitacoraRepository, BitacoraRepository>();
+builder.Services.AddScoped<IBitacoraService, BitacoraService>();
+
 
 // Business
 builder.Services.AddScoped<ComercioBusiness>();

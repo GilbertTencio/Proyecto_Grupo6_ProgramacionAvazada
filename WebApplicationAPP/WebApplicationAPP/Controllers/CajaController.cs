@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebApplicationAPP.Bussines;
-using WebApplicationAPP.Models;
 
 namespace WebApplicationAPP.Controllers
 {
@@ -8,11 +7,16 @@ namespace WebApplicationAPP.Controllers
     {
         private readonly SinpeBusiness _sinpeBusiness;
 
-        public IActionResult VerSinpes(string telefono)
+        public CajaController(SinpeBusiness sinpeBusiness)
         {
-            var sinpes = _sinpeBusiness.GetByTelefonoDestinatario(telefono);
-            return View(sinpes);
+            _sinpeBusiness = sinpeBusiness;
         }
 
+        // VER SINPES POR CAJA
+        public IActionResult VerSinpes(int idCaja)
+        {
+            var lista = _sinpeBusiness.GetByCaja(idCaja);
+            return View(lista);
+        }
     }
 }
