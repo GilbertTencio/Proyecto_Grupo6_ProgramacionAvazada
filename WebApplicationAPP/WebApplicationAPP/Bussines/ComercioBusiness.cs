@@ -6,10 +6,12 @@ namespace WebApplicationAPP.Bussines
     public class ComercioBusiness
     {
         private readonly IComercioRepository _repository;
+        private readonly IBitacoraService _bitacora;
 
-        public ComercioBusiness(IComercioRepository repository)
+        public ComercioBusiness(IComercioRepository repository, IBitacoraService bitacora)
         {
             _repository = repository;
+            _bitacora = bitacora;
         }
 
         public List<Comercio> GetAll()
@@ -24,34 +26,88 @@ namespace WebApplicationAPP.Bussines
 
         public bool Add(Comercio comercio)
         {
-            // validar duplicado
-            if (_repository.ExistsByIdentificacion(comercio.Identificacion))
+            try
             {
+                // Validar duplicado
+                if (_repository.ExistsByIdentificacion(comercio.Identificacion))
+                {
+                    return false;
+                }
+
+                comercio.FechaDeRegistro = DateTime.Now;
+                comercio.Estado = true;
+
+                _repository.AddComercio(comercio);
+
+                // BITÁCORA
+                _bitacora.RegistrarEvento(
+                    "Grupo6_Comercios",
+                    "Registrar",
+                    $"Se creó el comercio {comercio.Nombre}",
+                    null,
+                    null,
+                    comercio
+                );
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _bitacora.RegistrarEvento(
+                    "Grupo6_Comercios",
+                    "Error",
+                    ex.Message,
+                    ex.StackTrace,
+                    null,
+                    null
+                );
+
                 return false;
             }
-
-            comercio.FechaDeRegistro = DateTime.Now;
-            comercio.Estado = true;
-
-            _repository.AddComercio(comercio);
-
-            return true;
         }
 
         public bool Update(Comercio comercio)
         {
-            var existente = _repository.GetComercioById(comercio.IdComercio);
-
-            if (existente == null)
+            try
             {
+                var existente = _repository.GetComercioById(comercio.IdComercio);
+
+                if (existente == null)
+                {
+                    return false;
+                }
+
+                var anterior = existente;
+
+                comercio.FechaDeModificacion = DateTime.Now;
+
+                _repository.UpdateComercio(comercio);
+
+                // BITÁCORA
+                _bitacora.RegistrarEvento(
+                    "Grupo6_Comercios",
+                    "Editar",
+                    $"Se editó el comercio {comercio.Nombre}",
+                    null,
+                    anterior,
+                    comercio
+                );
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _bitacora.RegistrarEvento(
+                    "Grupo6_Comercios",
+                    "Error",
+                    ex.Message,
+                    ex.StackTrace,
+                    null,
+                    null
+                );
+
                 return false;
             }
-
-            comercio.FechaDeModificacion = DateTime.Now;
-
-            _repository.UpdateComercio(comercio);
-
-            return true;
         }
     }
 }

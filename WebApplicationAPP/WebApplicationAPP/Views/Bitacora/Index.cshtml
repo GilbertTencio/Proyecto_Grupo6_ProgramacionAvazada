@@ -1,0 +1,34 @@
+﻿@model List<WebApplicationAPP.Models.BitacoraEvento>
+
+@{
+    ViewData["Title"] = "Bitácora";
+}
+
+<h2>Bitácora de Eventos</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tabla</th>
+            <th>Tipo</th>
+            <th>Fecha</th>
+            <th>Descripción</th>
+            <th>StackTrace</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.IdEvento</td>
+                <td>@item.Tabla</td>
+                <td>@item.TipoEvento</td>
+                <td>@item.FechaEvento</td>
+                <td>@item.Descripcion</td>
+                <td>@item.StackTrace</td>
+            </tr>
+        }
+    </tbody>
+</table>

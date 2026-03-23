@@ -1,4 +1,5 @@
-﻿using WebApplicationAPP.Data;
+﻿using System.Linq;
+using WebApplicationAPP.Data;
 using WebApplicationAPP.Models;
 
 namespace WebApplicationAPP.Repositories
@@ -14,7 +15,7 @@ namespace WebApplicationAPP.Repositories
 
         public List<Comercio> GetAllComercios()
         {
-            return _context.Comercios.ToList();
+            return [.. _context.Comercios];
         }
 
         public Comercio GetComercioById(int id)

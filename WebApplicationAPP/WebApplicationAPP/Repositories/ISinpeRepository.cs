@@ -4,10 +4,10 @@ namespace WebApplicationAPP.Repositories
 {
     public interface ISinpeRepository
     {
-        List<Sinpe> GetAllSinpes();
-        List<Sinpe> GetByTelefonoDestinatario(string telefonoDestino);
-        List<Sinpe> GetByComercio(int idCaja);
-        void AddSinpe(Sinpe sinpe);
-        Caja GetCaja(int idCaja);
+        void Add(Sinpe sinpe);
+
+        List<Sinpe> GetAll();
+
+        List<Sinpe> GetByCaja(int idCaja);
     }
 }
