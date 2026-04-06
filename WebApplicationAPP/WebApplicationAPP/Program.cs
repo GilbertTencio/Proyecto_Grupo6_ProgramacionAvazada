@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WebApplicationAPP.Bussines;
 using WebApplicationAPP.Data;
+using WebApplicationAPP.Models;
 using WebApplicationAPP.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,14 +13,20 @@ builder.Services.AddControllersWithViews()
 
 // DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
-{
     options.UseMySql(
         builder.Configuration.GetConnectionString("MysqlConnection"),
         ServerVersion.AutoDetect(
             builder.Configuration.GetConnectionString("MysqlConnection")
         )
-    );
-});
+    )
+);
+
+
+// Identity
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
+builder.Services.AddRazorPages();
 
 // Repositories
 builder.Services.AddScoped<IComercioRepository, ComercioRepository>();
@@ -33,6 +41,8 @@ builder.Services.AddScoped<SinpeBusiness>();
 
 var app = builder.Build();
 
+
+// Pipeline
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -44,10 +54,13 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+
+app.MapRazorPages();
 app.Run();
