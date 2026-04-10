@@ -34,6 +34,9 @@ builder.Services.AddScoped<ISinpeRepository, SinpeRepository>();
 builder.Services.AddScoped<IBitacoraRepository, BitacoraRepository>();
 builder.Services.AddScoped<IBitacoraService, BitacoraService>();
 
+//Service
+builder.Services.AddMemoryCache();
+builder.Services.AddHttpClient<WeatherService>();
 
 // Business
 builder.Services.AddScoped<ComercioBusiness>();
