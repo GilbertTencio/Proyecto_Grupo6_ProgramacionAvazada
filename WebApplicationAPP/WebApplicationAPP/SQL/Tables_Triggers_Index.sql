@@ -102,3 +102,21 @@ END$$
 
 DELIMITER ;
 
+
+USE u484426513_pac126;
+
+CREATE TABLE Grupo6_ConfiguracionComercio (
+    IdConfiguracion INT AUTO_INCREMENT PRIMARY KEY,
+    IdComercio INT NOT NULL,
+    TipoConfiguracion INT NOT NULL,
+    Comision INT NOT NULL,
+    FechaDeRegistro DATETIME NOT NULL,
+    FechaDeModificacion DATETIME NULL,
+    Estado BIT NOT NULL,
+
+    CONSTRAINT FK_Config_Comercio
+    FOREIGN KEY (IdComercio)
+    REFERENCES Grupo6_Comercios(IdComercio),
+
+    UNIQUE (IdComercio)
+);
