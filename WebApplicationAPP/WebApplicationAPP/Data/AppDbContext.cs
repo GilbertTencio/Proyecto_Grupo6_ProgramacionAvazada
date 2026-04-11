@@ -24,11 +24,12 @@ namespace WebApplicationAPP.Data
                 .HasForeignKey(u => u.IdComercio)
                 .OnDelete(DeleteBehavior.Restrict);
         }
-
+        //clase
         public DbSet<Comercio> Comercios { get; set; }
         public DbSet<Caja> Cajas { get; set; }
         public DbSet<Sinpe> Sinpes { get; set; }
         public DbSet<BitacoraEvento> BitacoraEventos { get; set; }
+        public DbSet<ConfiguracionComercio> ConfiguracionComercio { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<ReporteMensual> ReporteMensual { get; set; }
     }
