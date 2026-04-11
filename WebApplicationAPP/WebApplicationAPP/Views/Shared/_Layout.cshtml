@@ -14,7 +14,6 @@
 <body>
 
     <header>
-
         <nav class="navbar navbar-expand-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand fw-bold" asp-controller="Home" asp-action="Index">
@@ -68,8 +67,8 @@
 
                             <li class="nav-item">
                                 <a class="nav-link text-warning"
-                                   asp-controller="Account"
-                                   asp-action="Logout">
+                                       asp-controller="Account"
+                                       asp-action="Logout">
                                     <i class="bi bi-box-arrow-right"></i>
                                     Logout
                                 </a>
@@ -79,8 +78,8 @@
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-white"
-                                   asp-controller="Account"
-                                   asp-action="Login">
+                                       asp-controller="Account"
+                                       asp-action="Login">
                                     <i class="bi bi-box-arrow-in-right"></i>
                                     Login
                                 </a>
@@ -88,8 +87,8 @@
 
                             <li class="nav-item">
                                 <a class="nav-link text-white"
-                                   asp-controller="Account"
-                                   asp-action="Register">
+                                       asp-controller="Account"
+                                       asp-action="Register">
                                     <i class="bi bi-person-plus"></i>
                                     Registro
                                 </a>
@@ -99,30 +98,73 @@
                 </div>
             </div>
         </nav>
-
     </header>
 
-    <div class="container">
+    <!-- ✅ WIDGET -->
+    <div id="weather-widget" class="weather-card">
+        <div class="weather-label">Clima</div>
+        <div id="weather-content">Cargando...</div>
+    </div>
 
+    <!-- ✅ CONTENIDO PRINCIPAL (TE FALTABA) -->
+    <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
-
     </div>
 
+    <!-- ✅ FOOTER -->
     <footer class="border-top footer text-muted mt-4">
-
         <div class="container">
             Banco Los patitos - Grupo 6 - 2026
         </div>
-
     </footer>
 
+    <!-- ✅ SCRIPTS (ORDEN CORRECTO) -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-
     <script src="~/js/site.js"></script>
+
+    <!-- ✅ SCRIPT DEL WIDGET (AHORA SÍ FUNCIONA) -->
+    <script>
+            $(function () {
+
+                setTimeout(() => {
+                    $("#weather-widget").addClass("show");
+                }, 200);
+
+                $.get("/api/weather")
+                    .done(function (data) {
+
+                        let icon = "☀️";
+                        let label = "Soleado";
+
+                        if (data.desc.includes("rain")) {
+                            icon = "🌧️";
+                            label = "Lluvioso";
+                        }
+                        else if (data.desc.includes("cloud")) {
+                            icon = "☁️";
+                            label = "Nublado";
+                        }
+
+                        const content = `
+                            <strong>${icon} ${data.temp}°C</strong><br/>
+                            <span style="font-size:11px">${data.city}</span><br/>
+                            <span style="font-size:11px; opacity:0.7">${label}</span>
+                        `;
+
+                        $("#weather-content").fadeOut(150, function () {
+                            $(this).html(content).fadeIn(200);
+                        });
+
+                    })
+                    .fail(function () {
+                        $("#weather-content").text("No disponible");
+                    });
+
+            });
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 
