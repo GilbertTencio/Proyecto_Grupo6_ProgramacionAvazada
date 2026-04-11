@@ -30,5 +30,6 @@ namespace WebApplicationAPP.Data
         public DbSet<Sinpe> Sinpes { get; set; }
         public DbSet<BitacoraEvento> BitacoraEventos { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<ReporteMensual> ReporteMensual { get; set; }
     }
 }

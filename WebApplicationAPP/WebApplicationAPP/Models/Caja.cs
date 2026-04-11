@@ -27,5 +27,6 @@ namespace WebApplicationAPP.Models
         public DateTime FechaDeRegistro { get; set; }
 
         public DateTime? FechaDeModificacion { get; set; }
+        public virtual Sinpe Sinpes { get; set; }
     }
 }
