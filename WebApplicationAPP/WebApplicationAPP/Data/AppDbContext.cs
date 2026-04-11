@@ -13,11 +13,22 @@ namespace WebApplicationAPP.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            builder.Entity<Usuario>()
+                .HasIndex(u => u.Identificacion)
+                .IsUnique();
+
+            builder.Entity<Usuario>()
+                .HasOne(u => u.Comercio)
+                .WithMany()
+                .HasForeignKey(u => u.IdComercio)
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
         public DbSet<Comercio> Comercios { get; set; }
         public DbSet<Caja> Cajas { get; set; }
         public DbSet<Sinpe> Sinpes { get; set; }
         public DbSet<BitacoraEvento> BitacoraEventos { get; set; }
+        public DbSet<Usuario> Usuarios { get; set; }
     }
 }

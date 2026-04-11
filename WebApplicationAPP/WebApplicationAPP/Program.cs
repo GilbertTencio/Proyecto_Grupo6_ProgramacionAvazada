@@ -33,6 +33,7 @@ builder.Services.AddScoped<IComercioRepository, ComercioRepository>();
 builder.Services.AddScoped<ISinpeRepository, SinpeRepository>();
 builder.Services.AddScoped<IBitacoraRepository, BitacoraRepository>();
 builder.Services.AddScoped<IBitacoraService, BitacoraService>();
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 
 //Service
 builder.Services.AddMemoryCache();
@@ -41,6 +42,7 @@ builder.Services.AddHttpClient<WeatherService>();
 // Business
 builder.Services.AddScoped<ComercioBusiness>();
 builder.Services.AddScoped<SinpeBusiness>();
+builder.Services.AddScoped<UsuarioBusiness>();
 
 var app = builder.Build();
 

@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using WebApplicationAPP.Models;
+using WebApplicationAPP.Repositories;
 using WebApplicationAPP.ViewModels;
 
 namespace WebApplicationAPP.Controllers
@@ -9,47 +10,30 @@ namespace WebApplicationAPP.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IUsuarioRepository _usuarioRepository;
 
-        public AccountController(UserManager<ApplicationUser> userManager,
-                                 SignInManager<ApplicationUser> signInManager)
+        public AccountController(
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
+            IUsuarioRepository usuarioRepository)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _usuarioRepository = usuarioRepository;
         }
 
         public IActionResult Register()
         {
-            return View();
+            TempData["Info"] = "El registro de usuarios ahora se administra desde el modulo de Usuarios.";
+            return RedirectToAction("Create", "Usuario");
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterViewModel model)
+        [ValidateAntiForgeryToken]
+        public IActionResult Register(RegisterViewModel model)
         {
-            if (ModelState.IsValid)
-            {
-                var user = new ApplicationUser
-                {
-                    UserName = model.Correo,
-                    Email = model.Correo,
-                    NombreCompleto = model.NombreCompleto,
-                    Carrera = string.Empty
-                };
-
-                var result = await _userManager.CreateAsync(user, model.Password);
-
-                if (result.Succeeded)
-                {
-                    await _signInManager.SignInAsync(user, false);
-                    return RedirectToAction("Index", "Home");
-                }
-
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError("", error.Description);
-                }
-            }
-
-            return View(model);
+            TempData["Info"] = "El registro de usuarios ahora se administra desde el modulo de Usuarios.";
+            return RedirectToAction("Create", "Usuario");
         }
 
         public IActionResult Login()
@@ -58,6 +42,7 @@ namespace WebApplicationAPP.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (!ModelState.IsValid)
@@ -69,7 +54,22 @@ namespace WebApplicationAPP.Controllers
 
             if (user is null)
             {
-                ModelState.AddModelError("", "No existe una cuenta registrada con ese correo.");
+                ModelState.AddModelError(string.Empty, "No existe una cuenta registrada con ese correo.");
+                return View(model);
+            }
+
+            var usuarioSistema = _usuarioRepository.GetUsuarioByIdNetUser(user.Id)
+                ?? _usuarioRepository.GetUsuarioByCorreo(model.Correo);
+
+            if (usuarioSistema is not null && !usuarioSistema.IdNetUser.HasValue)
+            {
+                usuarioSistema.IdNetUser = Guid.Parse(user.Id);
+                _usuarioRepository.UpdateUsuario(usuarioSistema);
+            }
+
+            if (usuarioSistema is not null && !usuarioSistema.Estado)
+            {
+                ModelState.AddModelError(string.Empty, "El usuario se encuentra inactivo.");
                 return View(model);
             }
 
@@ -77,7 +77,7 @@ namespace WebApplicationAPP.Controllers
 
             if (!passwordCorrect)
             {
-                ModelState.AddModelError("", "La contrasena ingresada es incorrecta.");
+                ModelState.AddModelError(string.Empty, "La contrasena ingresada es incorrecta.");
                 return View(model);
             }
 
@@ -89,9 +89,11 @@ namespace WebApplicationAPP.Controllers
             );
 
             if (result.Succeeded)
+            {
                 return RedirectToAction("Index", "Home");
+            }
 
-            ModelState.AddModelError("", "No fue posible iniciar sesion. Intentalo de nuevo.");
+            ModelState.AddModelError(string.Empty, "No fue posible iniciar sesion. Intentalo de nuevo.");
             return View(model);
         }
 

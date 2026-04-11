@@ -55,10 +55,49 @@ CREATE TABLE Grupo6_BitacoraEventos (
     FechaEvento DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE Grupo6_Usuarios (
+    IdUsuario INT NOT NULL AUTO_INCREMENT,
+    IdComercio INT NOT NULL,
+    IdNetUser CHAR(36) NULL,
+    Nombres VARCHAR(100) NOT NULL,
+    PrimerApellido VARCHAR(100) NOT NULL,
+    SegundoApellido VARCHAR(100) NOT NULL,
+    Identificacion VARCHAR(10) NOT NULL,
+    CorreoElectronico VARCHAR(200) NOT NULL,
+    FechaDeRegistro DATETIME NOT NULL,
+    FechaDeModificacion DATETIME NULL,
+    Estado TINYINT(1) NOT NULL DEFAULT 1,
+    PRIMARY KEY (IdUsuario),
+    UNIQUE (Identificacion),
+    CONSTRAINT FK_Usuarios_Comercios
+    FOREIGN KEY (IdComercio) REFERENCES Grupo6_Comercios(IdComercio)
+);
+
+CREATE TABLE Grupo6_Usuarios (
+    IdUsuario INT NOT NULL AUTO_INCREMENT,
+    IdComercio INT NOT NULL,
+    IdNetUser CHAR(36) NULL,
+    Nombres VARCHAR(100) NOT NULL,
+    PrimerApellido VARCHAR(100) NOT NULL,
+    SegundoApellido VARCHAR(100) NOT NULL,
+    Identificacion VARCHAR(10) NOT NULL,
+    CorreoElectronico VARCHAR(200) NOT NULL,
+    FechaDeRegistro DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FechaDeModificacion DATETIME NULL,
+    Estado TINYINT(1) NOT NULL DEFAULT 1,
+    PRIMARY KEY (IdUsuario),
+    CONSTRAINT UQ_Grupo6_Usuarios_Identificacion UNIQUE (Identificacion),
+    CONSTRAINT FK_Usuarios_Comercios
+        FOREIGN KEY (IdComercio) REFERENCES Grupo6_Comercios(IdComercio)
+);
+
 //Indices
 CREATE INDEX IDX_Cajas_IdComercio ON Grupo6_Cajas(IdComercio);
 CREATE INDEX IDX_Sinpe_IdCaja ON Grupo6_SINPE(IdCaja);
 CREATE INDEX IDX_Bitacora_Fecha ON Grupo6_BitacoraEventos(FechaEvento);
+CREATE INDEX IDX_Usuarios_IdComercio ON Grupo6_Usuarios(IdComercio);
+CREATE INDEX IDX_Usuarios_IdComercio ON Grupo6_Usuarios(IdComercio);
+CREATE INDEX IDX_Usuarios_IdNetUser ON Grupo6_Usuarios(IdNetUser);
 
 //Triggers
 // Trigger para registrar eventos de inserción en la tabla Grupo6_Cajas
