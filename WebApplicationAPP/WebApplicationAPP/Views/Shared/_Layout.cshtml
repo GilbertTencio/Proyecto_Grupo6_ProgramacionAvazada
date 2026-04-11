@@ -53,6 +53,13 @@
                                 Bitácora
                             </a>
                         </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Usuario" asp-action="Index">
+                                <i class="bi bi-people"></i>
+                                Usuarios
+                            </a>
+                        </li>
                     </ul>
 
                     <ul class="navbar-nav">
@@ -99,6 +106,36 @@
             </div>
         </nav>
     </header>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="container">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["Success"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="container">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @TempData["Error"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        </div>
+    }
+
+    @if (TempData["Info"] != null)
+    {
+        <div class="container">
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                @TempData["Info"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        </div>
+    }
 
     <!-- ✅ WIDGET -->
     <div id="weather-widget" class="weather-card">
