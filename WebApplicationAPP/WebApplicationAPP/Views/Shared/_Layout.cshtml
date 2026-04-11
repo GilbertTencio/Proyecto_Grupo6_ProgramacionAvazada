@@ -101,12 +101,16 @@
     </header>
 
     <!-- ✅ WIDGET -->
-    <div id="weather-widget" class="weather-card">
-        <div class="weather-label">Clima</div>
-        <div id="weather-content">Cargando...</div>
-    </div>
+    @if (ViewContext.RouteData.Values["controller"]?.ToString() == "Home"
+        && ViewContext.RouteData.Values["action"]?.ToString() == "Index")
+    {
+        <div id="weather-widget" class="weather-card">
+            <div class="weather-label">Clima</div>
+            <div id="weather-content">Cargando...</div>
+        </div>
+    }
 
-    <!-- ✅ CONTENIDO PRINCIPAL (TE FALTABA) -->
+    <!-- ✅ CONTENIDO PRINCIPAL -->
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -125,13 +129,14 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js"></script>
 
-    <!-- ✅ SCRIPT DEL WIDGET (AHORA SÍ FUNCIONA) -->
+    <!-- ✅ SCRIPT DEL WIDGET (Jquery) -->
     <script>
             $(function () {
 
                 setTimeout(() => {
                     $("#weather-widget").addClass("show");
                 }, 200);
+
 
                 $.get("/api/weather")
                     .done(function (data) {
@@ -162,6 +167,7 @@
                     .fail(function () {
                         $("#weather-content").text("No disponible");
                     });
+
 
             });
     </script>
