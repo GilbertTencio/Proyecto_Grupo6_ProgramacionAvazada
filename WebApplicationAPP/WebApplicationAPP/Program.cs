@@ -34,6 +34,7 @@ builder.Services.AddScoped<ISinpeRepository, SinpeRepository>();
 builder.Services.AddScoped<IBitacoraRepository, BitacoraRepository>();
 builder.Services.AddScoped<IBitacoraService, BitacoraService>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<IReporteMensualRepository, ReporteMensualRepository>();
 
 //Service
 builder.Services.AddMemoryCache();

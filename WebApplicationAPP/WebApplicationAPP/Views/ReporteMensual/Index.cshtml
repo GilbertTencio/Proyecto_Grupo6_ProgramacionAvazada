@@ -1,0 +1,40 @@
+﻿@model IEnumerable<ReporteMensual>
+
+@{
+    ViewData["Title"] = "Reportes Mensuales";
+}
+
+<h2>Reportes Mensuales</h2>
+
+<div>
+    <a asp-action="GenerarReportes">
+        Generar reportes
+    </a>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Nombre del comercio</th>
+            <th>Cantidad de cajas</th>
+            <th>Monto recaudado</th>
+            <th>Cantidad de SINPES</th>
+            <th>Monto total comisión</th>
+            <th>Fecha del reporte</th>
+        </tr>
+    </thead>
+    <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Comercio.Nombre</td>
+                    <td>@item.CantidadDeCajas</td>
+                    <td>₡ @item.MontoTotalRecaudado.ToString("N2")</td>
+                    <td>@item.CantidadDeSINPES</td>
+                    <td>₡ @item.MontoTotalComision.ToString("N2")</td>
+                    <td>@item.FechaDelReporte.ToString("MM/yyyy")</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

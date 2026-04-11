@@ -91,6 +91,18 @@ CREATE TABLE Grupo6_Usuarios (
         FOREIGN KEY (IdComercio) REFERENCES Grupo6_Comercios(IdComercio)
 );
 
+CREATE TABLE Grupo6_ReporteMensual (
+    IdReporte INT AUTO_INCREMENT PRIMARY KEY,
+    IdComercio INT NOT NULL,
+    CantidadDeCajas INT NOT NULL,
+    MontoTotalRecaudado DECIMAL(15,2) NOT NULL,
+    CantidadDeSINPES INT NOT NULL,
+    MontoTotalComision DECIMAL(15,2) NOT NULL,
+    FechaDelReporte DATETIME NOT NULL,
+    UNIQUE KEY uk_comercio_mes (IdComercio, FechaDelReporte),
+    FOREIGN KEY (IdComercio) REFERENCES Grupo6_Comercios(IdComercio)
+);
+
 //Indices
 CREATE INDEX IDX_Cajas_IdComercio ON Grupo6_Cajas(IdComercio);
 CREATE INDEX IDX_Sinpe_IdCaja ON Grupo6_SINPE(IdCaja);
