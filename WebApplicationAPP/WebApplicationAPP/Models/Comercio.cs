@@ -44,5 +44,6 @@ namespace WebApplicationAPP.Models
 
         [Required]
         public bool Estado { get; set; }
+        public virtual Caja Cajas { get; set; }
     }
 }
