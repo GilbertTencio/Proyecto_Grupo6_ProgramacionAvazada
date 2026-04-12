@@ -34,7 +34,6 @@ public class ReporteMensualRepository : IReporteMensualRepository
         {
             var sinpesDelMes = comercio.Cajas
                 .SelectMany(c => c.Sinpes)
-                .Where(s => s.FechaDeRegistro >= inicioMes && s.FechaDeRegistro < finMes)
                 .ToList();
 
             var montoTotal = sinpesDelMes.Sum(s => s.Monto);

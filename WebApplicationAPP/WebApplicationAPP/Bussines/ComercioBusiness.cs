@@ -1,5 +1,6 @@
 ﻿using WebApplicationAPP.Models;
 using WebApplicationAPP.Repositories;
+using WebApplicationAPP.Data;
 
 namespace WebApplicationAPP.Bussines
 {
@@ -7,11 +8,16 @@ namespace WebApplicationAPP.Bussines
     {
         private readonly IComercioRepository _repository;
         private readonly IBitacoraService _bitacora;
+        private readonly AppDbContext _context;
 
-        public ComercioBusiness(IComercioRepository repository, IBitacoraService bitacora)
+        public ComercioBusiness(
+            IComercioRepository repository,
+            IBitacoraService bitacora,
+            AppDbContext context)
         {
             _repository = repository;
             _bitacora = bitacora;
+            _context = context;
         }
 
         public List<Comercio> GetAll()
@@ -28,7 +34,6 @@ namespace WebApplicationAPP.Bussines
         {
             try
             {
-                // Validar duplicado
                 if (_repository.ExistsByIdentificacion(comercio.Identificacion))
                 {
                     return false;
@@ -37,16 +42,43 @@ namespace WebApplicationAPP.Bussines
                 comercio.FechaDeRegistro = DateTime.Now;
                 comercio.Estado = true;
 
+                // 🔥 GUARDAR COMERCIO
                 _repository.AddComercio(comercio);
 
-                // BITÁCORA
+                // 🔥 CALCULAR CANTIDAD DE CAJAS (por comercio)
+                var cantidadCajas = _context.Cajas
+                    .Count(c => c.IdComercio == comercio.IdComercio);
+
+                var numeroCaja = cantidadCajas + 1;
+
+                var nombreCaja = $"Caja{numeroCaja:D2}";
+
+                // 🔥 CREAR CAJA AUTOMÁTICA
+                var caja = new Caja
+                {
+                    IdComercio = comercio.IdComercio,
+                    Nombre = nombreCaja,
+                    Telefono = comercio.Telefono,
+                    Estado = true,
+                    FechaDeRegistro = DateTime.Now
+                };
+
+                _context.Cajas.Add(caja);
+                _context.SaveChanges();
+
+                // ✅ BITÁCORA SEGURA
                 _bitacora.RegistrarEvento(
                     "Grupo6_Comercios",
                     "Registrar",
-                    $"Se creó el comercio {comercio.Nombre}",
+                    $"Se creó el comercio {comercio.Nombre} con {nombreCaja}",
                     null,
                     null,
-                    comercio
+                    new
+                    {
+                        comercio.IdComercio,
+                        comercio.Nombre,
+                        comercio.Identificacion
+                    }
                 );
 
                 return true;
@@ -59,7 +91,11 @@ namespace WebApplicationAPP.Bussines
                     ex.Message,
                     ex.StackTrace,
                     null,
-                    null
+                    new
+                    {
+                        comercio.Nombre,
+                        comercio.Identificacion
+                    }
                 );
 
                 return false;
@@ -83,14 +119,21 @@ namespace WebApplicationAPP.Bussines
 
                 _repository.UpdateComercio(comercio);
 
-                // BITÁCORA
                 _bitacora.RegistrarEvento(
                     "Grupo6_Comercios",
                     "Editar",
                     $"Se editó el comercio {comercio.Nombre}",
                     null,
-                    anterior,
-                    comercio
+                    new
+                    {
+                        anterior.IdComercio,
+                        anterior.Nombre
+                    },
+                    new
+                    {
+                        comercio.IdComercio,
+                        comercio.Nombre
+                    }
                 );
 
                 return true;
