@@ -28,6 +28,8 @@ namespace WebApplicationAPP.Models
         [Required]
         public DateTime FechaDelReporte { get; set; }
 
-        public virtual Comercio Comercio { get; set; }
+        [ForeignKey("IdComercio")]
+        public virtual Comercio Comercio { get; set; } = null!;
+
     }
 }

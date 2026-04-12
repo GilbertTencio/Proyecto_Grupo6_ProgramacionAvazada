@@ -10,32 +10,26 @@ namespace WebApplicationAPP.Models
         [Key]
         public int IdComercio { get; set; }
 
-        [Required]
-        [StringLength(30)]
-        public string Identificacion { get; set; }
+        [Required, StringLength(30)]
+        public string Identificacion { get; set; } = string.Empty;
 
         [Required]
         public int TipoIdentificacion { get; set; }
 
-        [Required]
-        [StringLength(200)]
-        public string Nombre { get; set; }
+        [Required, StringLength(200)]
+        public string Nombre { get; set; } = string.Empty;
 
         [Required]
         public int TipoDeComercio { get; set; }
 
-        [Required]
-        [StringLength(20)]
-        public string Telefono { get; set; }
+        [Required, StringLength(20)]
+        public string Telefono { get; set; } = string.Empty;
 
-        [Required]
-        [EmailAddress]
-        [StringLength(200)]
-        public string CorreoElectronico { get; set; }
+        [Required, StringLength(200), EmailAddress]
+        public string CorreoElectronico { get; set; } = string.Empty;
 
-        [Required]
-        [StringLength(500)]
-        public string Direccion { get; set; }
+        [Required, StringLength(500)]
+        public string Direccion { get; set; } = string.Empty;
 
         [Required]
         public DateTime FechaDeRegistro { get; set; }
@@ -44,6 +38,9 @@ namespace WebApplicationAPP.Models
 
         [Required]
         public bool Estado { get; set; }
-        public virtual Caja Cajas { get; set; }
+
+        // 🔥 RELACIONES
+        public List<Caja> Cajas { get; set; } = new();
+        public ConfiguracionComercio? ConfiguracionComercio { get; set; }
     }
 }

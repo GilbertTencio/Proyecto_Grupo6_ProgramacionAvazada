@@ -1,16 +1,10 @@
 ﻿@model IEnumerable<ReporteMensual>
 
-@{
-    ViewData["Title"] = "Reportes Mensuales";
-}
-
 <h2>Reportes Mensuales</h2>
 
-<div>
-    <a asp-action="GenerarReportes">
-        Generar reportes
-    </a>
-</div>
+<form asp-action="GenerarReporteMensual" method="post">
+    <button type="submit">Generar reportes</button>
+</form>
 
 <table>
     <thead>
@@ -24,17 +18,16 @@
         </tr>
     </thead>
     <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.Comercio.Nombre</td>
-                    <td>@item.CantidadDeCajas</td>
-                    <td>₡ @item.MontoTotalRecaudado.ToString("N2")</td>
-                    <td>@item.CantidadDeSINPES</td>
-                    <td>₡ @item.MontoTotalComision.ToString("N2")</td>
-                    <td>@item.FechaDelReporte.ToString("MM/yyyy")</td>
-                </tr>
-            }
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Comercio?.Nombre</td>
+                <td>@item.CantidadDeCajas</td>
+                <td>₡ @item.MontoTotalRecaudado.ToString("N2")</td>
+                <td>@item.CantidadDeSINPES</td>
+                <td>₡ @item.MontoTotalComision.ToString("N2")</td>
+                <td>@item.FechaDelReporte.ToString("MM/yyyy")</td>
+            </tr>
         }
     </tbody>
 </table>
