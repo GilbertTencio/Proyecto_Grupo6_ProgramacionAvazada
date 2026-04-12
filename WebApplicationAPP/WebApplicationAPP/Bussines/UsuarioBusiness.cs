@@ -201,8 +201,18 @@ namespace WebApplicationAPP.Bussines
                     "Editar",
                     $"Se edito el usuario {usuarioActualizado.Nombres} {usuarioActualizado.PrimerApellido}",
                     null,
-                    existente,
-                    usuarioActualizado
+                    new
+                    {
+                        existente.IdUsuario,
+                        existente.Nombres,
+                        existente.CorreoElectronico
+                    },
+                    new
+                    {
+                        usuarioActualizado.IdUsuario,
+                        usuarioActualizado.Nombres,
+                        usuarioActualizado.CorreoElectronico
+                    }
                 );
 
                 return (true, "Usuario actualizado correctamente.");

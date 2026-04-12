@@ -20,9 +20,9 @@ namespace WebApplicationAPP.Controllers
         }
 
         [HttpPost]
-        public IActionResult GenerarReporteMensual(ReporteMensual reporteMensual)
+        public async Task<IActionResult> GenerarReporteMensual()
         {
-            _repository.GenerarReportesMensuales(reporteMensual);
+            await _repository.GenerarReportesMensuales();
 
             return RedirectToAction("Index");
         }

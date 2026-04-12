@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WebApplicationAPP.Data;
 using WebApplicationAPP.Models;
-using WebApplicationAPP.Repositories;
 
 public class ReporteMensualRepository : IReporteMensualRepository
 {
@@ -15,54 +14,53 @@ public class ReporteMensualRepository : IReporteMensualRepository
     public List<ReporteMensual> GetAll()
     {
         return _context.ReporteMensual
-            .Include(r=>r.Comercio)
-            .OrderByDescending(r=>r.FechaDelReporte)
+            .Include(r => r.Comercio)
+            .OrderByDescending(r => r.FechaDelReporte)
             .ToList();
     }
 
-    public void GenerarReportesMensuales(ReporteMensual reporteMensual)
+    public async Task GenerarReportesMensuales()
     {
         var inicioMes = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
         var finMes = inicioMes.AddMonths(1);
-        var comercios = _context.Comercios
-            .Include(c=>c.Cajas)
-                .ThenInclude(cj=>cj.Sinpes)
-            .Include(c => c.TipoConfiguracion)
+
+        var comercios = await _context.Comercios
+            .Include(c => c.Cajas)
+                .ThenInclude(cj => cj.Sinpes)
+            .Include(c => c.ConfiguracionComercio)
             .ToListAsync();
 
         foreach (var comercio in comercios)
         {
             var sinpesDelMes = comercio.Cajas
                 .SelectMany(c => c.Sinpes)
-                .Where(s => s.Fecha >= inicioMes && s.Fecha < finMes)
                 .ToList();
 
-            int cantidadCajas = comercio.Cajas.Count;
-            int cantidadSinpes = sinpesDelMes.Count;
-            decimal montoTotal = sinpesDelMes.Sum(s => s.Monto);
-            decimal porcentaje = comercio.TipoConfiguracion.PorcentajeComision / 100m;
-            decimal comision = montoTotal * porcentaje;
+            var montoTotal = sinpesDelMes.Sum(s => s.Monto);
 
-            var reporteExist = _context.ReporteMensual
-                .FirstOrDefault(r =>
+            var porcentaje = (comercio.ConfiguracionComercio?.Comision ?? 0) / 100m;
+            var comision = montoTotal * porcentaje;
+
+            var reporteExist = await _context.ReporteMensual
+                .FirstOrDefaultAsync(r =>
                     r.IdComercio == comercio.IdComercio &&
                     r.FechaDelReporte.Year == inicioMes.Year &&
                     r.FechaDelReporte.Month == inicioMes.Month);
 
             if (reporteExist != null)
             {
-                reporteExist.CantidadDeCajas = cantidadCajas;
-                reporteExist.CantidadDeSINPES = cantidadSinpes;
+                reporteExist.CantidadDeCajas = comercio.Cajas.Count;
+                reporteExist.CantidadDeSINPES = sinpesDelMes.Count;
                 reporteExist.MontoTotalRecaudado = montoTotal;
                 reporteExist.MontoTotalComision = comision;
             }
             else
             {
-                _context.ReporteMensual.AddAsync(new ReporteMensual
+                await _context.ReporteMensual.AddAsync(new ReporteMensual
                 {
                     IdComercio = comercio.IdComercio,
-                    CantidadDeCajas = cantidadCajas,
-                    CantidadDeSINPES = cantidadSinpes,
+                    CantidadDeCajas = comercio.Cajas.Count,
+                    CantidadDeSINPES = sinpesDelMes.Count,
                     MontoTotalRecaudado = montoTotal,
                     MontoTotalComision = comision,
                     FechaDelReporte = inicioMes
@@ -70,6 +68,6 @@ public class ReporteMensualRepository : IReporteMensualRepository
             }
         }
 
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
     }
 }

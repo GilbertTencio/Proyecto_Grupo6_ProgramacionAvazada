@@ -28,19 +28,40 @@ namespace WebApplicationAPP.Bussines
 
                 if (caja == null)
                 {
-                    _bitacora.RegistrarEvento("Grupo6_SINPE", "Error", "Caja no existe", "", new { }, sinpe);
+                    _bitacora.RegistrarEvento(
+                        "Grupo6_SINPE",
+                        "Error",
+                        "Caja no existe",
+                        "",
+                        new { },
+                        new { sinpe.IdCaja }
+                    );
                     return false;
                 }
 
                 if (!caja.Estado)
                 {
-                    _bitacora.RegistrarEvento("Grupo6_SINPE", "Error", "Caja inactiva", "", new { }, sinpe);
+                    _bitacora.RegistrarEvento(
+                        "Grupo6_SINPE",
+                        "Error",
+                        "Caja inactiva",
+                        "",
+                        new { },
+                        new { sinpe.IdCaja }
+                    );
                     return false;
                 }
 
                 if (sinpe.Monto <= 0)
                 {
-                    _bitacora.RegistrarEvento("Grupo6_SINPE", "Error", "Monto inválido", "", new { }, sinpe);
+                    _bitacora.RegistrarEvento(
+                        "Grupo6_SINPE",
+                        "Error",
+                        "Monto inválido",
+                        "",
+                        new { },
+                        new { sinpe.Monto }
+                    );
                     return false;
                 }
 
@@ -49,13 +70,35 @@ namespace WebApplicationAPP.Bussines
 
                 _repository.Add(sinpe);
 
-                _bitacora.RegistrarEvento("Grupo6_SINPE", "Registrar", "Pago registrado", "", new { }, sinpe);
+                // ✅ BITÁCORA SEGURA
+                _bitacora.RegistrarEvento(
+                    "Grupo6_SINPE",
+                    "Registrar",
+                    "Pago registrado",
+                    "",
+                    new { },
+                    new
+                    {
+                        sinpe.IdCaja,
+                        sinpe.Monto,
+                        sinpe.TelefonoOrigen,
+                        sinpe.Descripcion
+                    }
+                );
 
                 return true;
             }
             catch (Exception ex)
             {
-                _bitacora.RegistrarEvento("Grupo6_SINPE", "Error", ex.Message, ex.StackTrace ?? "", new { }, new { });
+                _bitacora.RegistrarEvento(
+                    "Grupo6_SINPE",
+                    "Error",
+                    ex.Message,
+                    ex.StackTrace ?? "",
+                    new { },
+                    new { }
+                );
+
                 return false;
             }
         }

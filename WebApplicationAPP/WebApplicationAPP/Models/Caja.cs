@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApplicationAPP.Models
@@ -13,20 +12,25 @@ namespace WebApplicationAPP.Models
         [Required]
         public int IdComercio { get; set; }
 
-        [Required]
-        [StringLength(100)]
-        public string Nombre { get; set; }
+        [Required, StringLength(100)]
+        public string Nombre { get; set; } = string.Empty;
 
-        [Required]
-        [StringLength(20)]
-        public string Telefono { get; set; }
+        [Required, StringLength(20)]
+        public string Telefono { get; set; } = string.Empty;
 
         [Required]
         public bool Estado { get; set; }
 
         public DateTime FechaDeRegistro { get; set; }
-
         public DateTime? FechaDeModificacion { get; set; }
-        public virtual Sinpe Sinpes { get; set; }
+
+        // 🔥 CAMBIO CLAVE → LISTA
+        public List<Sinpe> Sinpes { get; set; } = new();
+
+        [ForeignKey("IdComercio")]
+        public Comercio Comercio { get; set; } = null!;
+
+ 
+
     }
 }

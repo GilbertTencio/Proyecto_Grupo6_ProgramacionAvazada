@@ -1,10 +1,6 @@
 ﻿using WebApplicationAPP.Models;
-
-namespace WebApplicationAPP.Repositories
+public interface IReporteMensualRepository
 {
-    public interface IReporteMensualRepository
-    {
-        void GenerarReportesMensuales(ReporteMensual reporteMensual);
-        List<ReporteMensual> GetAll();
-    }
+    List<ReporteMensual> GetAll();
+    Task GenerarReportesMensuales();
 }

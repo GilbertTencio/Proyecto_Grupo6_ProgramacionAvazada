@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WebApplicationAPP.Data;
 
 namespace WebApplicationAPP.Controllers
@@ -15,6 +16,7 @@ namespace WebApplicationAPP.Controllers
         public IActionResult Index()
         {
             var eventos = _context.BitacoraEventos
+                .AsNoTracking()
                 .OrderByDescending(e => e.FechaEvento)
                 .ToList();
 

@@ -39,6 +39,7 @@ builder.Services.AddScoped<IReporteMensualRepository, ReporteMensualRepository>(
 //Service
 builder.Services.AddMemoryCache();
 builder.Services.AddHttpClient<WeatherService>();
+builder.Services.AddDbContext<AppDbContext>();
 
 // Business
 builder.Services.AddScoped<ComercioBusiness>();

@@ -16,6 +16,6 @@ namespace WebApplicationAPP.Models
         public bool Estado { get; set; }
 
         [ForeignKey("IdComercio")]
-        public Comercio Comercio { get; set; }
+        public Comercio Comercio { get; set; } = null!;
     }
 }

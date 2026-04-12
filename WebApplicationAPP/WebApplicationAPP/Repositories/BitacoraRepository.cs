@@ -1,4 +1,5 @@
-﻿using WebApplicationAPP.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using WebApplicationAPP.Data;
 using WebApplicationAPP.Models;
 
 namespace WebApplicationAPP.Repositories
@@ -21,6 +22,7 @@ namespace WebApplicationAPP.Repositories
         public List<BitacoraEvento> GetAll()
         {
             return _context.BitacoraEventos
+                .AsNoTracking()
                 .OrderByDescending(e => e.FechaEvento)
                 .ToList();
         }
