@@ -33,6 +33,11 @@ namespace WebApplicationAPP.Bussines
             return _usuarioRepository.GetAllUsuarios();
         }
 
+        public Usuario? GetById(int id)
+        {
+            return _usuarioRepository.GetUsuarioById(id);
+        }
+
         public UsuarioEditViewModel? GetEditViewModelById(int id)
         {
             var usuario = _usuarioRepository.GetUsuarioById(id);
@@ -74,28 +79,49 @@ namespace WebApplicationAPP.Bussines
 
         public async Task<(bool Success, string Message)> AddAsync(UsuarioCreateViewModel model)
         {
-            var usuario = new Usuario
-            {
-                IdComercio = model.IdComercio,
-                Nombres = model.Nombres,
-                PrimerApellido = model.PrimerApellido,
-                SegundoApellido = model.SegundoApellido,
-                Identificacion = model.Identificacion,
-                CorreoElectronico = model.CorreoElectronico,
-                FechaDeRegistro = DateTime.Now,
-                Estado = true
-            };
+            Usuario? usuario = null;
+
+            await using var transaction = await _context.Database.BeginTransactionAsync();
 
             try
             {
+                var user = new ApplicationUser
+                {
+                    UserName = model.CorreoElectronico,
+                    Email = model.CorreoElectronico,
+                    NombreCompleto = $"{model.Nombres} {model.PrimerApellido} {model.SegundoApellido}".Trim(),
+                    Carrera = string.Empty
+                };
+
+                var identityResult = await _userManager.CreateAsync(user, model.Password);
+
+                if (!identityResult.Succeeded)
+                {
+                    return (false, string.Join(" ", identityResult.Errors.Select(e => e.Description)));
+                }
+
+                usuario = new Usuario
+                {
+                    IdComercio = model.IdComercio,
+                    IdNetUser = Guid.Parse(user.Id),
+                    Nombres = model.Nombres,
+                    PrimerApellido = model.PrimerApellido,
+                    SegundoApellido = model.SegundoApellido,
+                    Identificacion = model.Identificacion,
+                    CorreoElectronico = model.CorreoElectronico,
+                    FechaDeRegistro = DateTime.Now,
+                    Estado = true
+                };
+
                 _usuarioRepository.AddUsuario(usuario);
+                await transaction.CommitAsync();
 
                 _bitacora.RegistrarEvento(
                     "Grupo6_Usuarios",
                     "Registrar",
                     $"Se creo el usuario {usuario.Nombres} {usuario.PrimerApellido}",
-                    string.Empty,
-                    new { },
+                    null,
+                    null,
                     usuario
                 );
 
@@ -103,12 +129,14 @@ namespace WebApplicationAPP.Bussines
             }
             catch (Exception ex)
             {
+                await transaction.RollbackAsync();
+
                 _bitacora.RegistrarEvento(
                     "Grupo6_Usuarios",
                     "Error",
                     ex.Message,
-                    ex.StackTrace ?? string.Empty,
-                    new { },
+                    ex.StackTrace,
+                    null,
                     model
                 );
 
@@ -129,29 +157,31 @@ namespace WebApplicationAPP.Bussines
                     return (false, "El usuario no existe.");
                 }
 
+                ApplicationUser? identityUser = null;
+
                 if (existente.IdNetUser.HasValue)
                 {
-                    var identityUser = await _userManager.FindByIdAsync(existente.IdNetUser.Value.ToString());
+                    identityUser = await _userManager.FindByIdAsync(existente.IdNetUser.Value.ToString());
+                }
 
-                    if (identityUser is not null)
+                if (identityUser is not null)
+                {
+                    identityUser.Email = model.CorreoElectronico;
+                    identityUser.UserName = model.CorreoElectronico;
+                    identityUser.NombreCompleto = $"{model.Nombres} {model.PrimerApellido} {model.SegundoApellido}".Trim();
+
+                    var identityResult = await _userManager.UpdateAsync(identityUser);
+
+                    if (!identityResult.Succeeded)
                     {
-                        identityUser.Email = model.CorreoElectronico;
-                        identityUser.UserName = model.CorreoElectronico;
-                        identityUser.NombreCompleto = $"{model.Nombres} {model.PrimerApellido} {model.SegundoApellido}".Trim();
-
-                        var identityResult = await _userManager.UpdateAsync(identityUser);
-
-                        if (!identityResult.Succeeded)
-                        {
-                            return (false, string.Join(" ", identityResult.Errors.Select(e => e.Description)));
-                        }
+                        return (false, string.Join(" ", identityResult.Errors.Select(e => e.Description)));
                     }
                 }
 
                 var usuarioActualizado = new Usuario
                 {
                     IdUsuario = model.IdUsuario,
-                    IdComercio = model.IdComercio,
+                    IdComercio = existente.IdComercio,
                     IdNetUser = existente.IdNetUser,
                     Nombres = model.Nombres,
                     PrimerApellido = model.PrimerApellido,
@@ -170,9 +200,19 @@ namespace WebApplicationAPP.Bussines
                     "Grupo6_Usuarios",
                     "Editar",
                     $"Se edito el usuario {usuarioActualizado.Nombres} {usuarioActualizado.PrimerApellido}",
-                    string.Empty,
-                    existente,
-                    usuarioActualizado
+                    null,
+                    new
+                    {
+                        existente.IdUsuario,
+                        existente.Nombres,
+                        existente.CorreoElectronico
+                    },
+                    new
+                    {
+                        usuarioActualizado.IdUsuario,
+                        usuarioActualizado.Nombres,
+                        usuarioActualizado.CorreoElectronico
+                    }
                 );
 
                 return (true, "Usuario actualizado correctamente.");
@@ -185,71 +225,12 @@ namespace WebApplicationAPP.Bussines
                     "Grupo6_Usuarios",
                     "Error",
                     ex.Message,
-                    ex.StackTrace ?? string.Empty,
-                    new { },
+                    ex.StackTrace,
+                    null,
                     model
                 );
 
                 return (false, "No fue posible actualizar el usuario.");
-            }
-        }
-
-        public async Task<(bool Success, string Message)> DeleteAsync(int idUsuario)
-        {
-            await using var transaction = await _context.Database.BeginTransactionAsync();
-
-            try
-            {
-                var usuario = _usuarioRepository.GetUsuarioById(idUsuario);
-
-                if (usuario is null)
-                {
-                    return (false, "El usuario no existe.");
-                }
-
-                if (usuario.IdNetUser.HasValue)
-                {
-                    var identityUser = await _userManager.FindByIdAsync(usuario.IdNetUser.Value.ToString());
-
-                    if (identityUser is not null)
-                    {
-                        var result = await _userManager.DeleteAsync(identityUser);
-
-                        if (!result.Succeeded)
-                        {
-                            return (false, string.Join(" ", result.Errors.Select(e => e.Description)));
-                        }
-                    }
-                }
-
-                _usuarioRepository.DeleteUsuario(idUsuario);
-                await transaction.CommitAsync();
-
-                _bitacora.RegistrarEvento(
-                    "Grupo6_Usuarios",
-                    "Eliminar",
-                    $"Se elimino el usuario {usuario.Nombres} {usuario.PrimerApellido}",
-                    string.Empty,
-                    usuario,
-                    new { }
-                );
-
-                return (true, "Usuario eliminado correctamente.");
-            }
-            catch (Exception ex)
-            {
-                await transaction.RollbackAsync();
-
-                _bitacora.RegistrarEvento(
-                    "Grupo6_Usuarios",
-                    "Error",
-                    ex.Message,
-                    ex.StackTrace ?? string.Empty,
-                    new { IdUsuario = idUsuario },
-                    new { }
-                );
-
-                return (false, "No fue posible eliminar el usuario.");
             }
         }
     }

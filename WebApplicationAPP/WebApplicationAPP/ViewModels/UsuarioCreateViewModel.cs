@@ -32,5 +32,16 @@ namespace WebApplicationAPP.ViewModels
         [StringLength(200)]
         [Display(Name = "Correo Electronico")]
         public string CorreoElectronico { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "La contrasena es obligatoria.")]
+        [DataType(DataType.Password)]
+        [Display(Name = "Contrasena")]
+        public string Password { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Debe confirmar la contrasena.")]
+        [DataType(DataType.Password)]
+        [Compare(nameof(Password), ErrorMessage = "La confirmacion no coincide con la contrasena.")]
+        [Display(Name = "Confirmar Contrasena")]
+        public string ConfirmPassword { get; set; } = string.Empty;
     }
 }

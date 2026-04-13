@@ -51,19 +51,6 @@ namespace WebApplicationAPP.Repositories
             _context.SaveChanges();
         }
 
-        public void DeleteUsuario(int idUsuario)
-        {
-            var usuario = _context.Usuarios.Find(idUsuario);
-
-            if (usuario is null)
-            {
-                return;
-            }
-
-            _context.Usuarios.Remove(usuario);
-            _context.SaveChanges();
-        }
-
         public bool ExistsByIdentificacion(string identificacion)
         {
             return _context.Usuarios.Any(u => u.Identificacion == identificacion);

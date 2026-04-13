@@ -1,5 +1,4 @@
-using Microsoft.EntityFrameworkCore;
-using WebApplicationAPP.Data;
+﻿using WebApplicationAPP.Data;
 using WebApplicationAPP.Models;
 
 namespace WebApplicationAPP.Repositories
@@ -22,8 +21,6 @@ namespace WebApplicationAPP.Repositories
         public List<Sinpe> GetAll()
         {
             return _context.Sinpes
-                .Include(s => s.Caja)
-                .ThenInclude(c => c.Comercio)
                 .OrderByDescending(s => s.FechaDeRegistro)
                 .ToList();
         }
@@ -31,8 +28,6 @@ namespace WebApplicationAPP.Repositories
         public List<Sinpe> GetByCaja(int idCaja)
         {
             return _context.Sinpes
-                .Include(s => s.Caja)
-                .ThenInclude(c => c.Comercio)
                 .Where(s => s.IdCaja == idCaja)
                 .OrderByDescending(s => s.FechaDeRegistro)
                 .ToList();

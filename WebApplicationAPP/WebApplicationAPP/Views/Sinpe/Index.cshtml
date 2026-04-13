@@ -1,4 +1,4 @@
-@model List<WebApplicationAPP.Models.Sinpe>
+﻿@model List<WebApplicationAPP.Models.Sinpe>
 
 @{
     ViewData["Title"] = "Historial SINPE";
@@ -9,10 +9,10 @@
 <table class="table table-bordered">
     <thead>
         <tr>
-            <th>Telefono Origen</th>
-            <th>Caja</th>
+            <th>Teléfono Origen</th>
+            <th>Nombre</th>
             <th>Monto</th>
-            <th>Descripcion</th>
+            <th>Descripción</th>
             <th>Fecha</th>
             <th>Estado</th>
         </tr>
@@ -23,7 +23,6 @@
         {
             <tr>
                 <td>@item.TelefonoOrigen</td>
-                <td>@item.Caja.NombreMostrado</td>
                 <td>@item.Monto</td>
                 <td>@item.Descripcion</td>
                 <td>@item.FechaDeRegistro</td>

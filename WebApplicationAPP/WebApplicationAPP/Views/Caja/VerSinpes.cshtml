@@ -1,4 +1,4 @@
-@model IEnumerable<WebApplicationAPP.Models.Sinpe>
+﻿@model IEnumerable<WebApplicationAPP.Models.Sinpe>
 
 @{
     ViewData["Title"] = "Ver Sinpes";
@@ -9,10 +9,9 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>Caja</th>
-            <th>Telefono Origen</th>
+            <th>Teléfono Origen</th>
             <th>Monto</th>
-            <th>Descripcion</th>
+            <th>Descripción</th>
             <th>Fecha</th>
             <th>Estado</th>
         </tr>
@@ -22,7 +21,6 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>@item.Caja.NombreMostrado</td>
                 <td>@item.TelefonoOrigen</td>
                 <td>@item.Monto</td>
                 <td>@item.Descripcion</td>
