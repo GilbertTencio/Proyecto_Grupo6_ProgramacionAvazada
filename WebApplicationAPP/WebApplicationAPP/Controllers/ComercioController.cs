@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WebApplicationAPP.Bussines;
+using WebApplicationAPP.Data;
 using WebApplicationAPP.Models;
 
 namespace WebApplicationAPP.Controllers
 {
+    [Authorize(Roles = Roles.Administrador)]
     public class ComercioController : Controller
     {
         private readonly ComercioBusiness _business;
@@ -13,14 +16,12 @@ namespace WebApplicationAPP.Controllers
             _business = business;
         }
 
-        // LISTA
         public IActionResult Index()
         {
             var comercios = _business.GetAll();
             return View(comercios);
         }
 
-        // DETAILS
         public IActionResult Details(int id)
         {
             var comercio = _business.GetById(id);
@@ -33,13 +34,11 @@ namespace WebApplicationAPP.Controllers
             return View(comercio);
         }
 
-        // CREATE GET
         public IActionResult Create()
         {
             return View();
         }
 
-        // CREATE POST
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(Comercio comercio)
@@ -53,14 +52,13 @@ namespace WebApplicationAPP.Controllers
 
             if (!creado)
             {
-                ModelState.AddModelError("", "La identificación ya existe.");
+                ModelState.AddModelError(string.Empty, "La identificación ya existe.");
                 return View(comercio);
             }
 
             return RedirectToAction(nameof(Index));
         }
 
-        // EDIT GET
         public IActionResult Edit(int id)
         {
             var comercio = _business.GetById(id);
@@ -73,7 +71,6 @@ namespace WebApplicationAPP.Controllers
             return View(comercio);
         }
 
-        // EDIT POST
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Comercio comercio)

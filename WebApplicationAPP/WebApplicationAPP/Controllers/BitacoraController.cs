@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplicationAPP.Data;
 
 namespace WebApplicationAPP.Controllers
 {
+    [Authorize(Roles = Roles.Administrador)]
     public class BitacoraController : Controller
     {
         private readonly AppDbContext _context;
