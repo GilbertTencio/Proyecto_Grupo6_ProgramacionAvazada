@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApplicationAPP.Models
@@ -24,13 +24,14 @@ namespace WebApplicationAPP.Models
         public DateTime FechaDeRegistro { get; set; }
         public DateTime? FechaDeModificacion { get; set; }
 
-        // 🔥 CAMBIO CLAVE → LISTA
         public List<Sinpe> Sinpes { get; set; } = new();
 
         [ForeignKey("IdComercio")]
         public Comercio Comercio { get; set; } = null!;
 
- 
-
+        [NotMapped]
+        public string NombreMostrado => Comercio is null
+            ? Nombre
+            : $"{Comercio.Nombre} - {Nombre}";
     }
 }

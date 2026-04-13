@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplicationAPP.Data;
 using WebApplicationAPP.Models;
 
+[Authorize(Roles = Roles.Administrador)]
 public class ConfiguracionController : Controller
 {
     private readonly AppDbContext _context;
@@ -23,37 +25,29 @@ public class ConfiguracionController : Controller
 
     public IActionResult Create()
     {
-        var comercios = _context.Comercios.ToList();
-        ViewBag.Comercios = comercios;
-
+        ViewBag.Comercios = _context.Comercios.ToList();
         return View();
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(ConfiguracionComercio model)
     {
-        // 🔥 VALIDACIÓN CLAVE (NO duplicados)
-        var existe = _context.ConfiguracionComercio
-            .Any(x => x.IdComercio == model.IdComercio);
+        var existe = _context.ConfiguracionComercio.Any(x => x.IdComercio == model.IdComercio);
 
         if (existe)
         {
-            ModelState.AddModelError("", "Este comercio ya tiene configuración");
-
-            // volver a cargar dropdown
+            ModelState.AddModelError(string.Empty, "Este comercio ya tiene configuracion.");
             ViewBag.Comercios = _context.Comercios.ToList();
             return View(model);
         }
 
-        // 🔧 DATOS AUTOMÁTICOS
         model.FechaDeRegistro = DateTime.Now;
         model.Estado = true;
 
-        // guardar
         _context.ConfiguracionComercio.Add(model);
         await _context.SaveChangesAsync();
 
         return RedirectToAction("Index");
     }
-
 }

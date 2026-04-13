@@ -1,11 +1,14 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using WebApplicationAPP.Bussines;
+using WebApplicationAPP.Data;
 using WebApplicationAPP.Models;
 using WebApplicationAPP.ViewModels;
 
 namespace WebApplicationAPP.Controllers
 {
+    [Authorize(Roles = Roles.Administrador)]
     public class UsuarioController : Controller
     {
         private readonly UsuarioBusiness _business;
@@ -32,8 +35,7 @@ namespace WebApplicationAPP.Controllers
         {
             if (_business.ExistsByIdentificacion(model.Identificacion))
             {
-                TempData["Error"] = "Ya existe un usuario con esa identificacion.";
-                return RedirectToAction(nameof(Create));
+                ModelState.AddModelError(nameof(model.Identificacion), "Ya existe un usuario con esa identificacion.");
             }
 
             if (!ModelState.IsValid)
@@ -93,6 +95,22 @@ namespace WebApplicationAPP.Controllers
                 }
 
                 return View(model);
+            }
+
+            TempData["Success"] = resultado.Message;
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var resultado = await _business.DeleteAsync(id);
+
+            if (!resultado.Success)
+            {
+                TempData["Error"] = resultado.Message;
+                return RedirectToAction(nameof(Index));
             }
 
             TempData["Success"] = resultado.Message;

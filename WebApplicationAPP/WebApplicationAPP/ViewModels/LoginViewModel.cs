@@ -1,14 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
 namespace WebApplicationAPP.ViewModels
 {
     public class LoginViewModel
     {
-        [Required]
-        public string Correo { get; set; }
+        [Required(ErrorMessage = "El correo es obligatorio.")]
+        [EmailAddress(ErrorMessage = "Ingresa un correo valido.")]
+        [Display(Name = "Correo")]
+        public string Correo { get; set; } = string.Empty;
 
-        [Required]
-        public string Password { get; set; }
+        [Required(ErrorMessage = "La contrasena es obligatoria.")]
+        [DataType(DataType.Password)]
+        [Display(Name = "Contrasena")]
+        public string Password { get; set; } = string.Empty;
     }
 }

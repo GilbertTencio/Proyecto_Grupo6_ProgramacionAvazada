@@ -36,10 +36,14 @@
                 <td>@item.FechaDeRegistro.ToString("dd/MM/yyyy HH:mm")</td>
                 <td>@(item.FechaDeModificacion?.ToString("dd/MM/yyyy HH:mm") ?? "-")</td>
                 <td>@(item.Estado ? "Activo" : "Inactivo")</td>
-                <td>
+                <td class="d-flex gap-2">
                     <a asp-action="Edit" asp-route-id="@item.IdUsuario" class="btn btn-warning btn-sm">
                         Editar
                     </a>
+                    <form asp-action="Delete" asp-route-id="@item.IdUsuario" method="post" onsubmit="return confirm('¿Deseas eliminar este usuario?');">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                    </form>
                 </td>
             </tr>
         }
