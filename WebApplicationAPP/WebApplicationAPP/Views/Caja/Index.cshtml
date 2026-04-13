@@ -1,31 +1,33 @@
-@model IEnumerable<WebApplicationAPP.Models.Caja>
+﻿@model List<WebApplicationAPP.Models.Caja>
 
 @{
     ViewData["Title"] = "Cajas";
 }
 
-<h2>Cajas asignadas</h2>
+<h2>Listado de Cajas</h2>
 
-<table class="table table-striped table-bordered align-middle">
-    <thead class="table-dark">
+<table class="table table-bordered">
+    <thead>
         <tr>
             <th>Nombre</th>
-            <th>Telefono</th>
+            <th>Comercio</th>
+            <th>Teléfono</th>
+            <th>Fecha Registro</th>
             <th>Estado</th>
-            <th>Fecha de registro</th>
             <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var c in Model)
         {
             <tr>
-                <td>@item.Nombre</td>
-                <td>@item.Telefono</td>
-                <td>@(item.Estado ? "Activa" : "Inactiva")</td>
-                <td>@item.FechaDeRegistro.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>@c.Nombre</td>
+                <td>@c.Comercio.Nombre</td>
+                <td>@c.Telefono</td>
+                <td>@c.FechaDeRegistro.ToString("g")</td>
+                <td>@(c.Estado ? "Activo" : "Inactivo")</td>
                 <td>
-                    <a asp-action="VerSinpes" asp-route-idCaja="@item.IdCaja" class="btn btn-primary btn-sm">
+                    <a asp-action="VerSinpes" asp-route-idCaja="@c.IdCaja" class="btn btn-info btn-sm">
                         Ver SINPE
                     </a>
                 </td>

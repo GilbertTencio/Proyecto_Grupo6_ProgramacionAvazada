@@ -14,7 +14,7 @@
 }
 
 <form asp-action="Create" method="post">
-    
+
     <div class="form-group">
         <label>Teléfono Origen</label>
         <input asp-for="TelefonoOrigen" class="form-control" />
@@ -31,14 +31,44 @@
     </div>
 
     <div class="form-group">
-        <label>Caja</label>
-        <select asp-for="IdCaja" class="form-control" asp-items="ViewBag.Cajas">
-            <option value="">Seleccione una caja</option>
-        </select>
+        <label>Teléfono Destino (SINPE)</label>
+        <input type="text" id="TelefonoDestino" name="TelefonoDestino" class="form-control" placeholder="Ingrese número SINPE" />
     </div>
+
+    <div class="form-group">
+        <label>Comercio</label>
+        <input type="text" id="NombreComercio" class="form-control" readonly />
+    </div>
+
+    <!-- 🔥 ID OCULTO -->
+    <input type="hidden" id="IdCaja" name="IdCaja" />
 
     <br />
 
     <button type="submit" class="btn btn-primary">Registrar</button>
     <a asp-action="Index" class="btn btn-secondary">Volver</a>
 </form>
+
+@section Scripts {
+    <script>
+        document.getElementById("TelefonoDestino").addEventListener("blur", function () {
+            var telefono = this.value;
+
+            if (!telefono) return;
+
+            fetch(`/Sinpe/ObtenerCajaPorTelefono?telefono=${telefono}`)
+                .then(res => {
+                    if (!res.ok) throw new Error();
+                    return res.json();
+                })
+                .then(data => {
+                    document.getElementById("IdCaja").value = data.idCaja;
+                    document.getElementById("NombreComercio").value = data.nombre;
+                })
+                .catch(() => {
+                    document.getElementById("NombreComercio").value = "No encontrado";
+                    document.getElementById("IdCaja").value = "";
+                });
+        });
+    </script>
+}

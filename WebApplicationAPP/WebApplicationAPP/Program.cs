@@ -55,7 +55,9 @@ builder.Services.AddScoped<IReporteMensualRepository, ReporteMensualRepository>(
 
 builder.Services.AddMemoryCache();
 builder.Services.AddHttpClient<WeatherService>();
-builder.Services.AddScoped<JwtTokenService>();
+builder.Services.AddDbContext<AppDbContext>();
+builder.Services.AddScoped<IBitacoraService, BitacoraService>();
+
 
 builder.Services.AddScoped<ComercioBusiness>();
 builder.Services.AddScoped<SinpeBusiness>();

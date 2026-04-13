@@ -1,10 +1,7 @@
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
 using WebApplicationAPP.Bussines;
 using WebApplicationAPP.Data;
-using WebApplicationAPP.Repositories;
 
 namespace WebApplicationAPP.Controllers
 {
@@ -13,36 +10,24 @@ namespace WebApplicationAPP.Controllers
     {
         private readonly SinpeBusiness _sinpeBusiness;
         private readonly AppDbContext _context;
-        private readonly IUsuarioRepository _usuarioRepository;
 
-        public CajaController(
-            SinpeBusiness sinpeBusiness,
-            AppDbContext context,
-            IUsuarioRepository usuarioRepository)
+        public CajaController(SinpeBusiness sinpeBusiness, AppDbContext context)
         {
             _sinpeBusiness = sinpeBusiness;
             _context = context;
-            _usuarioRepository = usuarioRepository;
         }
 
-        public async Task<IActionResult> Index()
+        // 🔥 LISTAR CAJAS (LO QUE TE FALTABA)
+        public IActionResult Index()
         {
-            var usuario = ObtenerUsuarioActual();
-
-            if (usuario is null)
-            {
-                return Forbid();
-            }
-
-            var cajas = await _context.Cajas
-                .AsNoTracking()
-                .Where(c => c.IdComercio == usuario.IdComercio)
-                .OrderBy(c => c.Nombre)
-                .ToListAsync();
+            var cajas = _context.Cajas
+                .Include(c => c.Comercio)
+                .ToList();
 
             return View(cajas);
         }
 
+        // 🔥 VER SINPES POR CAJA
         public IActionResult VerSinpes(int idCaja)
         {
             var usuario = ObtenerUsuarioActual();

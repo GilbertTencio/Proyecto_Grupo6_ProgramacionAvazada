@@ -48,21 +48,32 @@ namespace WebApplicationAPP.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
+        public IActionResult ObtenerCajaPorTelefono(string telefono)
+        {
+            var caja = _context.Cajas
+                .Include(c => c.Comercio)
+                .FirstOrDefault(c => c.Telefono == telefono && c.Estado);
+
+            if (caja == null)
+            {
+                return NotFound();
+            }
+
+            return Json(new
+            {
+                idCaja = caja.IdCaja,
+                nombre = caja.Comercio.Nombre
+            });
+        }
+
+        // VER SINPES POR CAJA
         public IActionResult PorCaja(int idCaja)
         {
             var lista = _business.GetByCaja(idCaja);
             return View("Index", lista);
         }
 
-        private void CargarCajas()
-        {
-            var cajas = _context.Cajas
-                .Include(c => c.Comercio)
-                .OrderBy(c => c.Comercio.Nombre)
-                .ThenBy(c => c.Nombre)
-                .ToList();
 
-            ViewBag.Cajas = new SelectList(cajas, nameof(Caja.IdCaja), nameof(Caja.NombreMostrado));
-        }
     }
 }
