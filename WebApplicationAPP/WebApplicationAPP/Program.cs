@@ -40,6 +40,8 @@ builder.Services.AddScoped<IReporteMensualRepository, ReporteMensualRepository>(
 builder.Services.AddMemoryCache();
 builder.Services.AddHttpClient<WeatherService>();
 builder.Services.AddDbContext<AppDbContext>();
+builder.Services.AddScoped<IBitacoraService, BitacoraService>();
+
 
 // Business
 builder.Services.AddScoped<ComercioBusiness>();
