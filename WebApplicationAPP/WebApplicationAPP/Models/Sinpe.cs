@@ -25,7 +25,7 @@ namespace WebApplicationAPP.Models
         // 🔥 ESTA ES LA CLAVE
 
         [ForeignKey("IdCaja")]
-        public Caja Caja { get; set; } = null!;
+        public Caja Caja { get; set; }
 
 
     }

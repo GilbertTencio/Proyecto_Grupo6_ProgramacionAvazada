@@ -1,0 +1,37 @@
+﻿@model List<WebApplicationAPP.Models.Caja>
+
+@{
+    ViewData["Title"] = "Cajas";
+}
+
+<h2>Listado de Cajas</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Comercio</th>
+            <th>Teléfono</th>
+            <th>Fecha Registro</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var c in Model)
+        {
+            <tr>
+                <td>@c.Nombre</td>
+                <td>@c.Comercio.Nombre</td>
+                <td>@c.Telefono</td>
+                <td>@c.FechaDeRegistro.ToString("g")</td>
+                <td>@(c.Estado ? "Activo" : "Inactivo")</td>
+                <td>
+                    <a asp-action="VerSinpes" asp-route-idCaja="@c.IdCaja" class="btn btn-info btn-sm">
+                        Ver SINPE
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

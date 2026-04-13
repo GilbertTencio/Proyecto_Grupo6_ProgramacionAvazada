@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using WebApplicationAPP.Bussines;
 using WebApplicationAPP.Data;
 using WebApplicationAPP.Models;
@@ -47,11 +48,32 @@ namespace WebApplicationAPP.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
+        public IActionResult ObtenerCajaPorTelefono(string telefono)
+        {
+            var caja = _context.Cajas
+                .Include(c => c.Comercio)
+                .FirstOrDefault(c => c.Telefono == telefono && c.Estado);
+
+            if (caja == null)
+            {
+                return NotFound();
+            }
+
+            return Json(new
+            {
+                idCaja = caja.IdCaja,
+                nombre = caja.Comercio.Nombre
+            });
+        }
+
         // VER SINPES POR CAJA
         public IActionResult PorCaja(int idCaja)
         {
             var lista = _business.GetByCaja(idCaja);
             return View("Index", lista);
         }
+
+
     }
 }
