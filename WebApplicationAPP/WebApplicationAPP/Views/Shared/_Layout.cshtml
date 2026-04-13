@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html lang="es">
 <head>
@@ -12,6 +12,7 @@
 </head>
 
 <body>
+
     <header>
         <nav class="navbar navbar-expand-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
             <div class="container-fluid">
@@ -25,65 +26,51 @@
 
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        @if (User.Identity?.IsAuthenticated ?? false)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-controller="Home" asp-action="Index">
-                                    <i class="bi bi-house-door"></i>
-                                    Inicio
-                                </a>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Home" asp-action="Index">
+                                <i class="bi bi-house-door"></i>
+                                Inicio
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Comercio" asp-action="Index">
+                                <i class="bi bi-shop"></i>
+                                Comercios
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Sinpe" asp-action="Create">
+                                <i class="bi bi-arrow-left-right"></i>
+                                Sinpe
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Bitacora" asp-action="Index">
+                                <i class="bi bi-journal-text"></i>
+                                Bitácora
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Configuracion" asp-action="Index">
+                                <i class="bi bi-gear"></i>
+                                Configuración
+                            </a>
                             </li>
-
-                            @if (User.IsInRole("Administrador"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-white" asp-controller="Comercio" asp-action="Index">
-                                        <i class="bi bi-shop"></i>
-                                        Comercios
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-white" asp-controller="Sinpe" asp-action="Index">
-                                        <i class="bi bi-arrow-left-right"></i>
-                                        SINPE
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-white" asp-controller="Bitacora" asp-action="Index">
-                                        <i class="bi bi-journal-text"></i>
-                                        Bitacora
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-white" asp-controller="Configuracion" asp-action="Index">
-                                        <i class="bi bi-gear"></i>
-                                        Configuracion
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-white" asp-controller="ReporteMensual" asp-action="Index">
-                                        <i class="bi bi-bar-chart"></i>
-                                        Reportes mensuales
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-white" asp-controller="Usuario" asp-action="Index">
-                                        <i class="bi bi-people"></i>
-                                        Usuarios
-                                    </a>
-                                </li>
-                            }
-
-                            @if (User.IsInRole("Cajero") || User.IsInRole("Contador"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-white" asp-controller="Caja" asp-action="Index">
-                                        <i class="bi bi-safe"></i>
-                                        Cajas
-                                    </a>
-                                </li>
-                            }
-                        }
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Usuario" asp-action="Index">
+                                <i class="bi bi-people"></i>
+                                Usuarios
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="ReporteMensual" asp-action="Index">
+                                <i class="bi bi-people"></i>
+                                Reportes
+                            </a>
+                        </li>
                     </ul>
 
                     <ul class="navbar-nav">
@@ -97,7 +84,9 @@
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link text-warning" asp-controller="Account" asp-action="Logout">
+                                <a class="nav-link text-warning"
+                                       asp-controller="Account"
+                                       asp-action="Logout">
                                     <i class="bi bi-box-arrow-right"></i>
                                     Logout
                                 </a>
@@ -106,14 +95,18 @@
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-controller="Account" asp-action="Login">
+                                <a class="nav-link text-white"
+                                       asp-controller="Account"
+                                       asp-action="Login">
                                     <i class="bi bi-box-arrow-in-right"></i>
                                     Login
                                 </a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-controller="Account" asp-action="Register">
+                                <a class="nav-link text-white"
+                                       asp-controller="Account"
+                                       asp-action="Register">
                                     <i class="bi bi-person-plus"></i>
                                     Registro
                                 </a>
@@ -155,8 +148,8 @@
         </div>
     }
 
-    @if ((User.Identity?.IsAuthenticated ?? false)
-        && ViewContext.RouteData.Values["controller"]?.ToString() == "Home"
+    <!-- ✅ WIDGET -->
+    @if (ViewContext.RouteData.Values["controller"]?.ToString() == "Home"
         && ViewContext.RouteData.Values["action"]?.ToString() == "Index")
     {
         <div id="weather-widget" class="weather-card">
@@ -165,62 +158,69 @@
         </div>
     }
 
+    <!-- ✅ CONTENIDO PRINCIPAL -->
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
+    <!-- ✅ FOOTER -->
     <footer class="border-top footer text-muted mt-4">
         <div class="container">
             Banco Los patitos - Grupo 6 - 2026
         </div>
     </footer>
 
+    <!-- ✅ SCRIPTS (ORDEN CORRECTO) -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js"></script>
 
+    <!-- ✅ SCRIPT DEL WIDGET (Jquery) -->
     <script>
-        $(function () {
-            if ($("#weather-widget").length === 0) {
-                return;
-            }
+            $(function () {
 
-            setTimeout(() => {
-                $("#weather-widget").addClass("show");
-            }, 200);
+                setTimeout(() => {
+                    $("#weather-widget").addClass("show");
+                }, 200);
 
-            $.get("/api/weather")
-                .done(function (data) {
-                    let icon = "Sol";
-                    let label = "Soleado";
 
-                    if (data.desc.includes("rain")) {
-                        icon = "Lluvia";
-                        label = "Lluvioso";
-                    }
-                    else if (data.desc.includes("cloud")) {
-                        icon = "Nubes";
-                        label = "Nublado";
-                    }
+                $.get("/api/weather")
+                    .done(function (data) {
 
-                    const content = `
-                        <strong>${icon} ${data.temp} C</strong><br/>
-                        <span style="font-size:11px">${data.city}</span><br/>
-                        <span style="font-size:11px; opacity:0.7">${label}</span>
-                    `;
+                        let icon = "☀️";
+                        let label = "Soleado";
 
-                    $("#weather-content").fadeOut(150, function () {
-                        $(this).html(content).fadeIn(200);
+                        if (data.desc.includes("rain")) {
+                            icon = "🌧️";
+                            label = "Lluvioso";
+                        }
+                        else if (data.desc.includes("cloud")) {
+                            icon = "☁️";
+                            label = "Nublado";
+                        }
+
+                        const content = `
+                            <strong>${icon} ${data.temp}°C</strong><br/>
+                            <span style="font-size:11px">${data.city}</span><br/>
+                            <span style="font-size:11px; opacity:0.7">${label}</span>
+                        `;
+
+                        $("#weather-content").fadeOut(150, function () {
+                            $(this).html(content).fadeIn(200);
+                        });
+
+                    })
+                    .fail(function () {
+                        $("#weather-content").text("No disponible");
                     });
-                })
-                .fail(function () {
-                    $("#weather-content").text("No disponible");
-                });
-        });
+
+
+            });
     </script>
 
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>

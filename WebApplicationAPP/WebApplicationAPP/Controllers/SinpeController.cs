@@ -1,5 +1,4 @@
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebApplicationAPP.Bussines;
@@ -8,7 +7,6 @@ using WebApplicationAPP.Models;
 
 namespace WebApplicationAPP.Controllers
 {
-    [Authorize(Roles = Roles.Administrador)]
     public class SinpeController : Controller
     {
         private readonly SinpeBusiness _business;
@@ -20,27 +18,29 @@ namespace WebApplicationAPP.Controllers
             _context = context;
         }
 
+        // LISTADO GENERAL
         public IActionResult Index()
         {
             var lista = _business.GetAll();
             return View(lista);
         }
 
+        // FORMULARIO
         public IActionResult Create()
         {
-            CargarCajas();
+            ViewBag.Cajas = new SelectList(_context.Cajas, "IdCaja", "Nombre");
             return View();
         }
 
+        // REGISTRO
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public IActionResult Create(Sinpe sinpe)
         {
             var resultado = _business.Registrar(sinpe);
 
             if (!resultado)
             {
-                CargarCajas();
+                ViewBag.Cajas = new SelectList(_context.Cajas, "IdCaja", "Nombre");
                 ViewBag.Error = "No se pudo registrar el pago.";
                 return View(sinpe);
             }
