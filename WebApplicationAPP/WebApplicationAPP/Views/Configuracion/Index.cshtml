@@ -1,0 +1,27 @@
+﻿@model List<ConfiguracionComercio>
+
+<h2>Configuraciones</h2>
+
+<a asp-action="Create" class="btn btn-success mb-3">
+    Nueva Configuración
+</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Comercio</th>
+            <th>Tipo</th>
+            <th>Comisión</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Comercio.Nombre</td>
+                <td>@item.TipoConfiguracion</td>
+                <td>@item.Comision %</td>
+            </tr>
+        }
+    </tbody>
+</table>
