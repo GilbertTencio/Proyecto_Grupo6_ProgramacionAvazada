@@ -40,6 +40,8 @@ namespace WebApplicationAPP.Controllers
                 .Where(c => c.IdComercio == usuario.IdComercio)
                 .Include(c => c.Comercio) // Incluye la información del comercio
                 .OrderBy(c => c.Nombre) // Incluye ordenamiento por nombre de caja
+                .Include(c => c.Comercio)
+                .OrderBy(c => c.Nombre)
                 .ToListAsync();
 
             return View(cajas);

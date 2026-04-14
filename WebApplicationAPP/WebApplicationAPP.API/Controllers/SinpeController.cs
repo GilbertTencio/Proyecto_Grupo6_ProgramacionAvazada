@@ -1,27 +1,26 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 using WebApplicationAPP.Data;
 using WebApplicationAPP.Models;
 using WebApplicationAPP.Bussines;
 
 namespace WebApplicationAPP.API.Controllers
 {
+    [AllowAnonymous]
     [ApiController]
-    [Route("api/[controller]")]
-    public class SinpeController : ControllerBase
+    [Route("api/sinpe")]
+    public class SinpeApiController : ControllerBase
     {
         private readonly AppDbContext _context;
         private readonly SinpeBusiness _business;
 
-        public SinpeController(AppDbContext context, SinpeBusiness business)
+        public SinpeApiController(AppDbContext context, SinpeBusiness business)
         {
             _context = context;
             _business = business;
         }
 
-        // ============================================
-        // 🔥 1. CONSULTAR SINPE
-        // ============================================
         [HttpGet("consultar/{telefonoCaja}")]
         public IActionResult Consultar(string telefonoCaja)
         {
@@ -89,9 +88,6 @@ namespace WebApplicationAPP.API.Controllers
             }
         }
 
-        // ============================================
-        // 🔥 2. SINCRONIZAR SINPE
-        // ============================================
         [HttpPost("sincronizar/{idSinpe}")]
         public IActionResult Sincronizar(int idSinpe)
         {
@@ -127,9 +123,6 @@ namespace WebApplicationAPP.API.Controllers
             }
         }
 
-        // ============================================
-        // 🔥 3. RECIBIR SINPE
-        // ============================================
         [HttpPost("recibir")]
         public IActionResult Recibir([FromBody] SinpeRequest request)
         {
@@ -151,7 +144,7 @@ namespace WebApplicationAPP.API.Controllers
                 {
                     IdCaja = request.IdCaja,
                     TelefonoOrigen = request.TelefonoOrigen,
-                    TelefonoDestino = caja.Telefono, // 🔥 FIX REAL
+                    TelefonoDestino = caja.Telefono,
                     Monto = request.Monto,
                     Descripcion = request.Descripcion
                 };

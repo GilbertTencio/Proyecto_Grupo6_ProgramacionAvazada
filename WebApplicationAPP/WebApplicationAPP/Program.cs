@@ -12,6 +12,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews()
     .AddRazorRuntimeCompilation();
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(
         builder.Configuration.GetConnectionString("MysqlConnection"),
@@ -46,7 +49,6 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.AddRazorPages();
 
-// Repositories
 builder.Services.AddScoped<IComercioRepository, ComercioRepository>();
 builder.Services.AddScoped<ISinpeRepository, SinpeRepository>();
 builder.Services.AddScoped<IBitacoraRepository, BitacoraRepository>();
@@ -54,12 +56,10 @@ builder.Services.AddScoped<IBitacoraService, BitacoraService>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IReporteMensualRepository, ReporteMensualRepository>();
 
-// Servicios adicionales
 builder.Services.AddMemoryCache();
 builder.Services.AddHttpClient<WeatherService>();
 builder.Services.AddScoped<JwtTokenService>();
 
-// Business
 builder.Services.AddScoped<ComercioBusiness>();
 builder.Services.AddScoped<SinpeBusiness>();
 builder.Services.AddScoped<UsuarioBusiness>();
@@ -68,7 +68,12 @@ var app = builder.Build();
 
 await DbInitializer.InitializeAsync(app.Services);
 
-if (!app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+else
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
@@ -82,6 +87,8 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.MapControllers();
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Account}/{action=Login}/{id?}");
@@ -89,3 +96,6 @@ app.MapControllerRoute(
 app.MapRazorPages();
 
 app.Run();   
+
+app.Run();
+
