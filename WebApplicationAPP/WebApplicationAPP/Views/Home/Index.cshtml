@@ -1,18 +1,22 @@
 ﻿@{
-    ViewData["Title"] = "Inicio";
+    ViewData["Title"] = "Inicio"; // Establece el título de la página
 }
 
 <div class="text-center">
     <h1 class="display-4">Sistema SINPE</h1>
     <p>Gestión de pagos electrónicos y comercios afiliados</p>
 
-    <div class="mt-4">
+    <div class="mt-4"> 
         <a class="btn btn-primary btn-lg m-2" asp-controller="Sinpe" asp-action="Create">
             💸 Realizar SINPE
         </a>
 
-        <a class="btn btn-secondary btn-lg m-2" asp-controller="Sinpe" asp-action="Index">
+        <a class="btn btn-secondary btn-lg m-2" asp-controller="Sinpe" asp-action="Index"> 
             📊 Ver SINPES
+        </a>
+
+        <a class="btn btn-info btn-lg m-2" asp-controller="Caja" asp-action="Index">
+            📦 Ver Cajas
         </a>
 
         <a class="btn btn-info btn-lg m-2" asp-controller="Comercio" asp-action="Index">

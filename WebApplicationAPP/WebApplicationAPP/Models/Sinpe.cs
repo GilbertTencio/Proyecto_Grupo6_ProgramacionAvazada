@@ -22,10 +22,8 @@ namespace WebApplicationAPP.Models
 
         public DateTime FechaDeRegistro { get; set; }
 
-        // 🔥 ESTA ES LA CLAVE
-
-        [ForeignKey("IdCaja")]
-        public Caja Caja { get; set; } = null!;
+        [ForeignKey("IdCaja")] // Establece la relación con la entidad Caja
+        public Caja Caja { get; set; }
 
 
     }

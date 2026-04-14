@@ -11,7 +11,7 @@ namespace WebApplicationAPP.Controllers
     {
         private readonly ComercioBusiness _business;
 
-        public ComercioController(ComercioBusiness business)
+        public ComercioController(ComercioBusiness business) //Inyección de dependencia del negocio de comercio
         {
             _business = business;
         }
@@ -40,7 +40,7 @@ namespace WebApplicationAPP.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken] //Protección contra ataques CSRF
         public IActionResult Create(Comercio comercio)
         {
             if (!ModelState.IsValid)
@@ -52,7 +52,7 @@ namespace WebApplicationAPP.Controllers
 
             if (!creado)
             {
-                ModelState.AddModelError(string.Empty, "La identificación ya existe.");
+                ModelState.AddModelError(string.Empty, "La identificación ya existe."); //Agrega un error de validación si la identificación ya existe
                 return View(comercio);
             }
 

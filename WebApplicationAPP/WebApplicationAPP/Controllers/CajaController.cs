@@ -6,6 +6,7 @@ using WebApplicationAPP.Bussines;
 using WebApplicationAPP.Data;
 using WebApplicationAPP.Repositories;
 
+//Autenticacion
 namespace WebApplicationAPP.Controllers
 {
     [Authorize(Roles = Roles.CajeroAutorizado)]
@@ -37,7 +38,8 @@ namespace WebApplicationAPP.Controllers
             var cajas = await _context.Cajas
                 .AsNoTracking()
                 .Where(c => c.IdComercio == usuario.IdComercio)
-                .OrderBy(c => c.Nombre)
+                .Include(c => c.Comercio) // Incluye la información del comercio
+                .OrderBy(c => c.Nombre) // Incluye ordenamiento por nombre de caja
                 .ToListAsync();
 
             return View(cajas);
@@ -52,14 +54,15 @@ namespace WebApplicationAPP.Controllers
                 return Forbid();
             }
 
-            var caja = _context.Cajas.FirstOrDefault(c => c.IdCaja == idCaja && c.IdComercio == usuario.IdComercio);
+            var caja = _context.Cajas
+                .FirstOrDefault(c => c.IdCaja == idCaja && c.IdComercio == usuario.IdComercio);
 
             if (caja is null)
             {
                 return Forbid();
             }
 
-            var lista = _sinpeBusiness.GetByCaja(idCaja);
+            var lista = _sinpeBusiness.GetByCaja(idCaja); // Obtener los sinpes asociados a la caja seleccionada
             return View(lista);
         }
 

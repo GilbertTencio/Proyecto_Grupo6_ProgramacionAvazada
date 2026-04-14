@@ -6,21 +6,23 @@
 
 <h2>Cajas asignadas</h2>
 
-<table class="table table-striped table-bordered align-middle">
+<table class="table table-striped table-bordered align-middle"> 
     <thead class="table-dark">
         <tr>
             <th>Nombre</th>
-            <th>Telefono</th>
-            <th>Estado</th>
+            <th>Comercio</th>
+            <th>Teléfono</th>
+            <th>Estado</th> 
             <th>Fecha de registro</th>
             <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model) // Itera sobre cada caja en el modelo
         {
             <tr>
                 <td>@item.Nombre</td>
+                <td>@item.Comercio?.Nombre</td>
                 <td>@item.Telefono</td>
                 <td>@(item.Estado ? "Activa" : "Inactiva")</td>
                 <td>@item.FechaDeRegistro.ToString("dd/MM/yyyy HH:mm")</td>
@@ -32,4 +34,4 @@
             </tr>
         }
     </tbody>
-</table>
+</table>nmj0''

@@ -48,6 +48,25 @@ namespace WebApplicationAPP.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
+        public IActionResult ObtenerCajaPorTelefono(string telefono)
+        {
+            var caja = _context.Cajas
+                .Include(c => c.Comercio)
+                .FirstOrDefault(c => c.Telefono == telefono && c.Estado);
+
+            if (caja == null)
+            {
+                return NotFound();
+            }
+
+            return Json(new
+            {
+                idCaja = caja.IdCaja,
+                nombre = caja.Comercio.Nombre
+            });
+        }
+
         public IActionResult PorCaja(int idCaja)
         {
             var lista = _business.GetByCaja(idCaja);

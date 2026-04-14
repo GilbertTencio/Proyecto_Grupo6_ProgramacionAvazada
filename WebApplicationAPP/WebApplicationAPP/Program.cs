@@ -20,16 +20,16 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 );
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
-    {
-        options.Password.RequireDigit = true;
-        options.Password.RequiredLength = 6;
-        options.Password.RequireNonAlphanumeric = false;
-        options.Password.RequireUppercase = false;
-        options.Password.RequireLowercase = false;
-        options.User.RequireUniqueEmail = true;
-    })
-    .AddEntityFrameworkStores<AppDbContext>()
-    .AddDefaultTokenProviders();
+{
+    options.Password.RequireDigit = true;
+    options.Password.RequiredLength = 6;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireLowercase = false;
+    options.User.RequireUniqueEmail = true;
+})
+.AddEntityFrameworkStores<AppDbContext>()
+.AddDefaultTokenProviders();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -46,6 +46,7 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.AddRazorPages();
 
+// Repositories
 builder.Services.AddScoped<IComercioRepository, ComercioRepository>();
 builder.Services.AddScoped<ISinpeRepository, SinpeRepository>();
 builder.Services.AddScoped<IBitacoraRepository, BitacoraRepository>();
@@ -53,10 +54,12 @@ builder.Services.AddScoped<IBitacoraService, BitacoraService>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IReporteMensualRepository, ReporteMensualRepository>();
 
+// Servicios adicionales
 builder.Services.AddMemoryCache();
 builder.Services.AddHttpClient<WeatherService>();
 builder.Services.AddScoped<JwtTokenService>();
 
+// Business
 builder.Services.AddScoped<ComercioBusiness>();
 builder.Services.AddScoped<SinpeBusiness>();
 builder.Services.AddScoped<UsuarioBusiness>();
@@ -84,4 +87,5 @@ app.MapControllerRoute(
     pattern: "{controller=Account}/{action=Login}/{id?}");
 
 app.MapRazorPages();
-app.Run();
+
+app.Run();   
