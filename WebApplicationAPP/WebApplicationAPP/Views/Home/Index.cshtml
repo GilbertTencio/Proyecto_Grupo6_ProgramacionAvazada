@@ -1,30 +1,37 @@
-﻿@{
-    ViewData["Title"] = "Inicio"; // Establece el título de la página
+@using WebApplicationAPP.Data
+@{
+    ViewData["Title"] = "Inicio";
 }
 
 <div class="text-center">
     <h1 class="display-4">Sistema SINPE</h1>
     <p>Gestión de pagos electrónicos y comercios afiliados</p>
 
-    <div class="mt-4"> 
-        <a class="btn btn-primary btn-lg m-2" asp-controller="Sinpe" asp-action="Create">
-            💸 Realizar SINPE
-        </a>
+    <div class="mt-4">
+        @if (User.IsInRole(Roles.Administrador))
+        {
+            <a class="btn btn-primary btn-lg m-2" asp-controller="Sinpe" asp-action="Create">
+                💸 Realizar SINPE
+            </a>
 
-        <a class="btn btn-secondary btn-lg m-2" asp-controller="Sinpe" asp-action="Index"> 
-            📊 Ver SINPES
-        </a>
+            <a class="btn btn-secondary btn-lg m-2" asp-controller="Sinpe" asp-action="Index">
+                📊 Ver SINPES
+            </a>
 
-        <a class="btn btn-info btn-lg m-2" asp-controller="Caja" asp-action="Index">
-            📦 Ver Cajas
-        </a>
+            <a class="btn btn-info btn-lg m-2" asp-controller="Comercio" asp-action="Index">
+                🏪 Comercios
+            </a>
 
-        <a class="btn btn-info btn-lg m-2" asp-controller="Comercio" asp-action="Index">
-            🏪 Comercios
-        </a>
+            <a class="btn btn-dark btn-lg m-2" asp-controller="Bitacora" asp-action="Index">
+                📜 Bitácora
+            </a>
+        }
 
-        <a class="btn btn-dark btn-lg m-2" asp-controller="Bitacora" asp-action="Index">
-            📜 Bitácora
-        </a>
+        @if (User.IsInRole(Roles.Cajero) || User.IsInRole(Roles.Contador))
+        {
+            <a class="btn btn-info btn-lg m-2" asp-controller="Caja" asp-action="Index">
+                📦 Ver Cajas
+            </a>
+        }
     </div>
 </div>
