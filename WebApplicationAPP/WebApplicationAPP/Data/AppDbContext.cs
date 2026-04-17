@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using WebApplicationAPP.Models;
@@ -13,6 +14,13 @@ namespace WebApplicationAPP.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            builder.Entity<ApplicationUser>().ToTable("AspNetUsers_Grupo6");
+            builder.Entity<IdentityRole>().ToTable("AspNetRoles_Grupo6");
+            builder.Entity<IdentityUserRole<string>>().ToTable("AspNetUserRoles_Grupo6");
+            builder.Entity<IdentityUserClaim<string>>().ToTable("AspNetUserClaims_Grupo6");
+            builder.Entity<IdentityUserLogin<string>>().ToTable("AspNetUserLogins_Grupo6");
+            builder.Entity<IdentityUserToken<string>>().ToTable("AspNetUserTokens_Grupo6");
+            builder.Entity<IdentityRoleClaim<string>>().ToTable("AspNetRoleClaims_Grupo6");
 
             builder.Entity<Usuario>()
                 .HasIndex(u => u.Identificacion)

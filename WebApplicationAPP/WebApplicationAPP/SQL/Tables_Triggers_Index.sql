@@ -1,5 +1,72 @@
 /*
+CREATE TABLE AspNetUsers_Grupo6 LIKE AspNetUsers;
+CREATE TABLE AspNetRoles_Grupo6 LIKE AspNetRoles;
+CREATE TABLE AspNetUserRoles_Grupo6 LIKE AspNetUserRoles;
+CREATE TABLE AspNetUserClaims_Grupo6 LIKE AspNetUserClaims;
+CREATE TABLE AspNetUserLogins_Grupo6 LIKE AspNetUserLogins;
+CREATE TABLE AspNetUserTokens_Grupo6 LIKE AspNetUserTokens;
+CREATE TABLE AspNetRoleClaims_Grupo6 LIKE AspNetRoleClaims;
+
+INSERT INTO AspNetRoles_Grupo6 (Id, Name, NormalizedName, ConcurrencyStamp)
+VALUES 
+    (UUID(), 'Administrador', 'ADMINISTRADOR', UUID()),
+    (UUID(), 'Cajero', 'CAJERO', UUID());
+    
+    SELECT * FROM AspNetRoles_Grupo6;
+    
+ALTER TABLE AspNetUsers_Grupo6 
+ADD COLUMN NombreCompleto VARCHAR(256) NULL;
+    
+    DESCRIBE AspNetUsers_Grupo6;
+    
+    
+    
+-- 1. Guardar el Id en una variable para reutilizarlo
+SET @userId = UUID();
+SET @roleId = (SELECT Id FROM AspNetRoles_Grupo6 WHERE NormalizedName = 'ADMINISTRADOR');
+
+-- 2. Insertar el usuario
+INSERT INTO AspNetUsers_Grupo6 (
+    Id,
+    UserName,
+    NormalizedUserName,
+    Email,
+    NormalizedEmail,
+    EmailConfirmed,
+    PasswordHash,
+    SecurityStamp,
+    ConcurrencyStamp,
+    PhoneNumberConfirmed,
+    TwoFactorEnabled,
+    LockoutEnabled,
+    AccessFailedCount,
+    NombreCompleto
+)
+VALUES (
+    @userId,
+    'admin@banco.com',                          -- Cambia el correo
+    UPPER('admin@banco.com'),                   -- Debe ser igual al correo en MAYÚSCULAS
+    'admin@banco.com',                          -- Cambia el correo
+    UPPER('admin@banco.com'),                   -- Debe ser igual al correo en MAYÚSCULAS
+    1,
+    'AQAAAAIAAYagAAAAEEROLuBpCGaFGNHLk9NKLS+H7TjFzFpRlJSDXQ2alkBn9i3w2gCFLjCwdsAFNGqIRg==', -- Password: Admin123!
+    UUID(),
+    UUID(),
+    0,
+    0,
+    0,
+    0,
+    'Administrador General'                     -- Cambia el nombre
+);
+
+-- 3. Asignar el rol Administrador
+INSERT INTO AspNetUserRoles_Grupo6 (UserId, RoleId)
+VALUES (@userId, @roleId);
+
+
+
 CREATE TABLE Grupo6_Comercios (
+
     IdComercio INT NOT NULL AUTO_INCREMENT,
     Identificacion VARCHAR(30) NOT NULL,
     TipoIdentificacion INT NOT NULL,
